@@ -1,0 +1,1 @@
+# omikuji_japan_only
