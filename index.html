@@ -37,7 +37,7 @@
       text-align: center; padding: 30px 10px; display: flex; flex-direction: column;
       align-items: center; justify-content: center; min-height: 400px;
     }
-    .paywall-text { font-size: 1.3rem; font-weight: bold; margin-bottom: 20px; line-height: 1.8; }
+    .paywall-text { font-size: 1.3rem; font-weight: bold; margin-bottom: 20px; line-height: 1.8; color: #d34b31; }
     .invoice-container { display: none; width: 100%; animation: fadeIn 0.5s; }
     .qr-box {
       border: 3px solid #d34b31; border-radius: 10px; padding: 10px;
@@ -46,38 +46,35 @@
     .invoice-text {
       width: 90%; height: 60px; font-size: 0.8rem; word-break: break-all;
       padding: 8px; border: 1px solid #ccc; border-radius: 5px; resize: none;
-      background: #f9f9f9; margin-bottom: 10px; cursor: pointer;
+      background: #f9f9f9; margin-bottom: 10px; cursor: pointer; color: #333;
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* --- アニメーション要素 --- */
-    .flash { animation: flashAnim 0.3s ease-out; }
-    @keyframes flashAnim { 0% { background-color: #2c3e50; } 50% { background-color: #ffe600; } 100% { background-color: #2c3e50; } }
-    
-    .shrine-visual { font-size: 80px; position: relative; margin-bottom: 20px; height: 100px; }
-    .coin { position: absolute; font-size: 45px; top: -50px; left: 50%; transform: translateX(-50%); display: none; color: #f7931a; text-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 10; }
-    .drop-coin { display: block; animation: dropAnim 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-    @keyframes dropAnim { 0% { top: -60px; opacity: 1; transform: translateX(-50%) rotate(0deg); } 100% { top: 80px; opacity: 0; transform: translateX(-50%) rotate(180deg); } }
-    
-    .omikuji-box { display: inline-block; transition: transform 0.1s; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); }
-    .shake { animation: shakeAnim 0.4s infinite; }
-    @keyframes shakeAnim { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-4px, 0px) rotate(-15deg); } 50% { transform: translate(4px, 2px) rotate(15deg); } 75% { transform: translate(-2px, -2px) rotate(-5deg); } 100% { transform: translate(1px, 1px) rotate(0deg); } }
-
     /* --- ボタン --- */
-    .btn-container { text-align: center; margin-top: 20px; margin-bottom: 10px; z-index: 100; padding: 0 10px; }
+    .btn-container { text-align: center; margin-top: 10px; margin-bottom: 10px; z-index: 100; }
     .btn {
-      color: white; border: none; padding: 14px 25px; border-radius: 25px; cursor: pointer; 
-      font-family: 'Noto Serif JP', serif; font-size: 1.1rem; font-weight: bold;
-      transition: all 0.2s ease; margin: 5px; width: 90%; max-width: 300px; box-sizing: border-box;
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: #d34b31; color: white; border: none; padding: 14px 25px;
+      border-radius: 25px; cursor: pointer; font-family: 'Noto Serif JP', serif;
+      font-size: 1.1rem; box-shadow: 0 4px 10px rgba(211, 75, 49, 0.3);
+      transition: all 0.3s ease; margin: 5px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     }
     .btn:active { transform: translateY(2px); }
-    .btn-free { background-color: #4CAF50; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); }
-    .btn-pay { background-color: #f7931a; box-shadow: 0 4px 10px rgba(247, 147, 26, 0.3); }
-    .btn-secondary { background: #2c3e50; font-size: 0.9rem; padding: 10px 20px; }
-    .btn-share { background-color: #0f1419; margin-bottom: 10px; }
+    .btn-secondary { background: #2c3e50; font-size: 0.95rem; }
+    .btn-share { background: #0f1419; color: white; font-size: 1rem; }
+    .btn:disabled { background: #e0e0e0; color: #999; box-shadow: none; cursor: not-allowed; }
 
-    /* --- ポーリング＆ローダー --- */
+    /* --- アニメーション要素 (通常時は非表示) --- */
+    .shrine-visual { display: none; position: relative; margin-bottom: 20px; height: 160px; }
+    .omikuji-box { font-size: 80px; display: inline-block; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); margin-top: 40px;}
+    .coin { position: absolute; font-size: 45px; top: -10px; left: 50%; transform: translateX(-50%); display: none; color: #f7931a; text-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 10; }
+    .flash { animation: flashAnim 0.3s ease-out; }
+    @keyframes flashAnim { 0% { background-color: #2c3e50; } 50% { background-color: #ffe600; } 100% { background-color: #2c3e50; } }
+    .drop-coin { display: block; animation: dropAnim 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+    @keyframes dropAnim { 0% { top: -10px; opacity: 1; transform: translateX(-50%) rotate(0deg); } 100% { top: 70px; opacity: 0; transform: translateX(-50%) rotate(180deg); } }
+    .shake { animation: shakeAnim 0.4s infinite; }
+    @keyframes shakeAnim { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-4px, 0px) rotate(-15deg); } 50% { transform: translate(4px, 2px) rotate(15deg); } 75% { transform: translate(-2px, -2px) rotate(-5deg); } 100% { transform: translate(1px, 1px) rotate(0deg); } }
+    
+    .loading-text { font-size: 1rem; margin-top: 15px; font-weight: bold; letter-spacing: 0.1em; }
     .polling-area { margin-top: 15px; font-size: 1rem; color: #d34b31; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .spinner { width: 18px; height: 18px; border: 3px solid rgba(211, 75, 49, 0.3); border-top: 3px solid #d34b31; border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -104,24 +101,26 @@
     <!-- ⛩️ ステップ1 & 2: お賽銭エリア -->
     <div class="paywall-area" id="paywall-area">
       
-      <!-- アニメーション用：筒とコイン -->
-      <div class="shrine-visual">
+      <!-- アニメーション発火時のみ表示される要素 -->
+      <div class="shrine-visual" id="shrine-visual">
         <div class="coin" id="coin">₿</div>
         <div class="omikuji-box" id="omikuji">🪘</div>
+        <div class="loading-text">神様にお伺い中...⛩️</div>
       </div>
 
+      <!-- 初期画面のテキスト -->
       <div class="paywall-text" id="paywall-text"></div>
       
       <!-- 初回無料ボタン -->
-      <button class="btn btn-free" id="free-btn" onclick="playFree()">無料で引く✨</button>
+      <button class="btn" id="free-btn" onclick="playFree()" style="display:none;">無料で引く✨</button>
       <!-- 2回目以降のお賽銭ボタン -->
-      <button class="btn btn-pay" id="generate-btn" onclick="generateInvoice()" style="display:none;">100satsでお賽銭を入れる⚡️</button>
+      <button class="btn" id="generate-btn" onclick="generateInvoice()" style="display:none;">100satsのインボイスを発行</button>
       
       <!-- インボイス表示＆確認エリア -->
       <div class="invoice-container" id="invoice-container">
         
         <!-- ウォレット起動ボタン (スマホ特化) -->
-        <a id="wallet-btn" class="btn btn-pay" href="#" style="text-decoration: none; margin-bottom: 15px;">📲 ウォレットアプリで支払う</a>
+        <a id="wallet-btn" class="btn" href="#" style="text-decoration: none; margin-bottom: 15px; display: inline-block;">📲 ウォレットアプリで支払う</a>
         
         <div class="qr-box">
           <a id="lightning-link" href="#">
@@ -138,8 +137,8 @@
         </div>
 
         <!-- フォールバック用手動確認ボタン -->
-        <div style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
-          <p style="font-size: 0.75rem; color: #888; margin-bottom: 5px;">※自動で画面が切り替わらない場合</p>
+        <div style="margin-top: 20px; border-top: 1px dashed #e0e0e0; padding-top: 15px;">
+          <p style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">自動で画面が切り替わらない場合</p>
           <button class="btn btn-secondary" onclick="verifyPayment()">手動で決済確認する</button>
         </div>
       </div>
@@ -172,23 +171,21 @@
           <svg viewBox="0 0 24 24" aria-hidden="true" style="width: 18px; height: 18px; fill: white;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
           𝕏 で結果をシェアする
         </button>
-        <button class="btn" style="background:#d34b31;" onclick="resetApp()">もう一度引く</button>
+        <button class="btn" onclick="resetApp()">もう一度引く</button>
       </div>
     </div>
 
   </div>
 
   <script>
-    // ⚠️ あなたのAPIキー・URL設定（元コードのまま維持しています）
     const LNBITS_API_KEY = "67e5b0ad270f44d19e6d768bb3314e49"; 
     const LNBITS_API_URL = "https://demo.lnbits.com/api/v1/payments"; 
     const GAS_URL = "https://script.google.com/macros/s/AKfycbyI--Lii7gXF0wEPq3mPxAkcH-lSIKysIZNztaysItGbLtafaRkmHqSylETp15Zotns/exec";
 
     let currentPaymentHash = "";
     let checkPaymentInterval = null;
-    let currentOmikujiData = null; // Twitterシェア用データ保持
+    let currentOmikujiData = null;
 
-    // 初回判定
     window.onload = () => { initApp(); };
 
     function initApp() {
@@ -200,17 +197,15 @@
       } else {
         document.getElementById('free-btn').style.display = 'none';
         document.getElementById('generate-btn').style.display = 'inline-flex';
-        document.getElementById('paywall-text').innerHTML = "おみくじを引くには<br>お賽銭（100 sats）をお願いします⛩️⚡️";
+        document.getElementById('paywall-text').innerHTML = "おみくじを引くには<br>お賽銭（100 sats）をお願いします⛩️";
       }
     }
 
-    // ① 無料で引く
     function playFree() {
       localStorage.setItem('ln_omikuji_played', 'true');
       playAnimationAndFetch();
     }
 
-    // ② インボイスを生成する
     function generateInvoice() {
       const btn = document.getElementById('generate-btn');
       btn.innerText = "インボイス生成中...⚡️";
@@ -226,7 +221,6 @@
         currentPaymentHash = data.payment_hash;
         const invoice = data.payment_request;
         
-        // QRコード、文字列、ウォレット起動リンクをセット
         document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=lightning:${invoice}`;
         document.getElementById('lightning-link').href = `lightning:${invoice}`;
         document.getElementById('wallet-btn').href = `lightning:${invoice}`;
@@ -234,16 +228,15 @@
         
         btn.style.display = 'none';
         btn.disabled = false;
-        btn.innerText = "100satsでお賽銭を入れる⚡️";
+        btn.innerText = "100satsのインボイスを発行";
         document.getElementById('invoice-container').style.display = 'block';
         
-        // 支払い自動検知の開始
         pollPaymentStatus(currentPaymentHash);
       })
       .catch(err => {
         alert("インボイスの生成に失敗しました。時間をおいて試してください。");
         btn.disabled = false;
-        btn.innerText = "100satsでお賽銭を入れる⚡️";
+        btn.innerText = "100satsのインボイスを発行";
       });
     }
 
@@ -254,24 +247,21 @@
       alert("📋 インボイスをコピーしました！ウォレットに貼り付けてください。");
     }
 
-    // ③ 支払い自動検知（ポーリング）
     function pollPaymentStatus(hash) {
       checkPaymentInterval = setInterval(() => {
         fetch(`${LNBITS_API_URL}/${hash}`, {
-          method: "GET",
-          headers: { "X-Api-Key": LNBITS_API_KEY }
+          method: "GET", headers: { "X-Api-Key": LNBITS_API_KEY }
         })
         .then(res => res.json())
         .then(data => {
           if (data.paid) {
             clearInterval(checkPaymentInterval);
-            playAnimationAndFetch(); // 支払い完了！アニメーションへ
+            playAnimationAndFetch();
           }
         }).catch(console.error);
-      }, 3000); // 3秒ごとにチェック
+      }, 3000);
     }
 
-    // 手動確認用フォールバック
     function verifyPayment() {
       if (!currentPaymentHash) return;
       fetch(`${LNBITS_API_URL}/${currentPaymentHash}`, {
@@ -286,38 +276,39 @@
       });
     }
 
-    // ④ 雷＆ガラガラポン アニメーション ＋ GASフェッチ
+    // ⚡️ ここから神殿の扉が開くアニメーション ⚡️
     async function playAnimationAndFetch() {
-      // UIをスッキリさせる
+      // 初期画面の静的なUIを消す
       document.getElementById('invoice-container').style.display = 'none';
       document.getElementById('free-btn').style.display = 'none';
       document.getElementById('generate-btn').style.display = 'none';
-      document.getElementById('paywall-text').innerHTML = "神様にお伺い中...⛩️";
+      document.getElementById('paywall-text').style.display = 'none';
 
-      // アニメーション発火
-      document.body.classList.add('flash'); // カミナリ
+      // 隠していたアニメーション要素（筒とコイン）を出現させる
+      const shrineVisual = document.getElementById('shrine-visual');
       const coin = document.getElementById('coin');
       const omikuji = document.getElementById('omikuji');
       
+      shrineVisual.style.display = 'block';
+      document.body.classList.add('flash'); 
+      
       coin.style.display = 'block';
-      coin.classList.add('drop-coin'); // コイン落下
-      omikuji.classList.add('shake'); // 筒揺れる
+      coin.classList.add('drop-coin'); 
+      omikuji.classList.add('shake');
 
-      // アニメーションを最低1.5秒見せるためのPromise
+      // 最低1.5秒はアニメーションを見せる
       const animPromise = new Promise(resolve => setTimeout(resolve, 1500));
-      // GAS通信
       const fetchPromise = fetch(GAS_URL, { redirect: 'follow' }).then(res => res.json());
 
       try {
         const[_, data] = await Promise.all([animPromise, fetchPromise]);
-        currentOmikujiData = data; // シェア用に保存
+        currentOmikujiData = data;
 
-        // アニメーション終了処理
         document.body.classList.remove('flash');
         coin.classList.remove('drop-coin');
         coin.style.display = 'none';
         omikuji.classList.remove('shake');
-        omikuji.innerText = "📜"; // 筒から巻物に変化
+        omikuji.innerText = "📜";
 
         setTimeout(() => { showResult(data); omikuji.innerText = "🪘"; }, 500);
 
@@ -327,7 +318,6 @@
       }
     }
 
-    // ⑤ 結果を画面に表示
     function showResult(data) {
       document.getElementById('unsei').innerText = data.unsei;
       document.getElementById('message').innerText = data.message;
@@ -356,7 +346,6 @@
       }, 100);
     }
 
-    // ⑥ Twitterシェア機能
     function shareTwitter() {
       if(!currentOmikujiData) return;
       const text = encodeURIComponent(`電光石火！ビットコイン神社⛩️でおみくじを引いたよ！\n\n運勢：【${currentOmikujiData.unsei}】\n神告：${currentOmikujiData.message}\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ`);
@@ -364,22 +353,24 @@
       window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
     }
 
-    // ⑦ リセット処理
     function resetApp() {
       document.getElementById('content-area').classList.add('fade');
       setTimeout(() => {
         document.getElementById('content-area').style.display = 'none';
+        
+        // 画面を初期状態に戻す
         document.getElementById('paywall-area').style.display = 'flex';
+        document.getElementById('paywall-text').style.display = 'block';
+        document.getElementById('shrine-visual').style.display = 'none';
         document.getElementById('invoice-container').style.display = 'none';
         
-        // カミナリ・コインのリセット
         document.body.classList.remove('flash');
         document.getElementById('coin').style.display = 'none';
         document.getElementById('omikuji').classList.remove('shake');
         
         currentPaymentHash = "";
         clearInterval(checkPaymentInterval);
-        initApp(); // UI状態を更新
+        initApp(); 
         window.scrollTo(0, 0);
       }, 500);
     }
