@@ -1,277 +1,153 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2V0HQQP6WE"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ビットコイン神社おみくじ⚡️</title>
+<style>
+  body { font-family: 'Hiragino Kaku Gothic ProN', sans-serif; text-align: center; background-color: #f4f4f4; margin: 0; padding: 50px; }
+  .shrine-container { background: #fff; border-radius: 15px; padding: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; overflow: hidden; position: relative; }
+  h1 { color: #d32f2f; }
   
-    gtag('config', 'G-2V0HQQP6WE');
-  </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>⛩️LN Omikuji</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+  /* ガラガラ筒のデザイン */
+  .omikuji-box { font-size: 80px; margin: 20px 0; display: inline-block; transition: transform 0.1s; }
   
-  <style>
-    body {
-      margin: 0; padding: 20px 0; font-family: 'Noto Serif JP', serif;
-      background-color: #2c3e50; display: flex; justify-content: center;
-      align-items: flex-start; min-height: 100vh; box-sizing: border-box;
-    }
-    .omikuji-paper {
-      background-color: #fffdfa; width: 92vw; max-width: 500px; padding: 20px 10px;
-      box-sizing: border-box; position: relative; color: #d34b31;
-      border: 2px solid #d34b31; box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-      display: flex; flex-direction: column;
-    }
-    .omikuji-paper::before {
-      content: ""; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px;
-      border: 1px solid #d34b31; pointer-events: none;
-    }
+  /* ボタンのデザイン */
+  button { font-size: 18px; padding: 15px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.2s; width: 100%; }
+  .btn-free { background-color: #4CAF50; color: white; }
+  .btn-pay { background-color: #f7931a; color: white; } /* ビットコインオレンジ */
+  .btn-share { background-color: #000000; color: white; display: none; margin-top: 15px; }
 
-    /* --- お賽銭・インボイスエリア --- */
-    .paywall-area {
-      text-align: center; padding: 30px 10px; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; min-height: 400px;
-    }
-    .paywall-text { font-size: 1.3rem; font-weight: bold; margin-bottom: 20px; line-height: 1.8; }
-    .invoice-container { display: none; width: 100%; animation: fadeIn 0.5s; }
-    .qr-box {
-      border: 3px solid #d34b31; border-radius: 10px; padding: 10px;
-      background: white; display: inline-block; margin-bottom: 15px;
-    }
-    .invoice-text {
-      width: 90%; height: 60px; font-size: 0.8rem; word-break: break-all;
-      padding: 8px; border: 1px solid #ccc; border-radius: 5px; resize: none;
-      background: #f9f9f9; margin-bottom: 10px;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  /* 雷フラッシュアニメーション */
+  .flash { animation: flashAnim 0.3s ease-out; }
+  @keyframes flashAnim {
+    0% { background-color: #fff; }
+    50% { background-color: #ffe600; }
+    100% { background-color: #fff; }
+  }
 
-    /* --- おみくじ結果エリア --- */
-    .content-area { display: none; flex-direction: column; flex: 1; opacity: 1; transition: opacity 0.8s ease; }
-    .fade { opacity: 0 !important; }
+  /* ガラガラ揺れるアニメーション */
+  .shake { animation: shakeAnim 0.5s infinite; }
+  @keyframes shakeAnim {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    25% { transform: translate(-3px, 0px) rotate(-15deg); }
+    50% { transform: translate(3px, 2px) rotate(15deg); }
+    75% { transform: translate(-1px, -1px) rotate(-5deg); }
+    100% { transform: translate(1px, 1px) rotate(0deg); }
+  }
 
-    /* 元のスタイル */
-    .top-section { writing-mode: vertical-rl; width: 100%; min-height: 280px; padding: 30px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
-    .message-text { font-size: 1.6rem; font-weight: 700; line-height: 2; letter-spacing: 0.1em; }
-    .middle-section { margin: 0 15px; padding: 15px 10px; border-top: 1px solid #d34b31; border-bottom: 1px solid #d34b31; display: flex; justify-content: space-between; align-items: center; }
-    .unsei-label { font-size: 1.3rem; letter-spacing: 0.3em; font-weight: 700; }
-    .unsei-mark { width: 36px; height: 36px; border: 2px solid #d34b31; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; }
-    .unsei-value { font-size: 2.2rem; font-weight: 700; letter-spacing: 0.2em; }
-    .bottom-section { display: flex; flex-direction: row-reverse; flex-wrap: wrap; padding: 20px 5px; width: 100%; box-sizing: border-box; }
-    .detail-item { writing-mode: vertical-rl; height: 180px; margin: 0 12px 25px 12px; }
-    .detail-title { font-weight: 700; font-size: 1.2rem; margin-bottom: 8px; }
-    .detail-desc { font-size: 0.95rem; line-height: 1.5; }
+  /* コインが落ちるアニメーション */
+  .coin { position: absolute; font-size: 40px; top: -50px; left: 50%; transform: translateX(-50%); display: none; color: #f7931a; }
+  .drop-coin { display: block; animation: dropAnim 0.5s ease-in forwards; }
+  @keyframes dropAnim {
+    0% { top: -50px; opacity: 1; }
+    100% { top: 150px; opacity: 0; }
+  }
 
-    /* --- ボタン --- */
-    .btn-container { text-align: center; margin-top: 10px; margin-bottom: 10px; z-index: 100; }
-    .btn {
-      background: #d34b31; color: white; border: none; padding: 12px 25px;
-      border-radius: 25px; cursor: pointer; font-family: 'Noto Serif JP', serif;
-      font-size: 1.1rem; box-shadow: 0 4px 10px rgba(211, 75, 49, 0.3);
-      transition: all 0.3s ease; margin: 5px;
-    }
-    .btn-secondary { background: #2c3e50; }
-    .btn:active { transform: translateY(2px); }
-
-    .loader {
-      border: 3px solid rgba(211, 75, 49, 0.2); border-top: 3px solid #d34b31;
-      border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      z-index: 10; display: none;
-    }
-    @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-  </style>
+  #result-text { font-size: 24px; font-weight: bold; margin-top: 20px; color: #333; display: none; }
+  #sats-message { color: #666; font-size: 14px; margin-top: 10px; }
+</style>
 </head>
 <body>
 
-  <div class="loader" id="loader"></div>
+<div class="shrine-container" id="app-box">
+  <h1>ビットコイン神社⛩️</h1>
+  <div class="coin" id="coin">₿</div>
+  <div class="omikuji-box" id="omikuji">🪘</div>
+  
+  <p id="sats-message">初回は無料でおみくじが引けます！</p>
+  
+  <button id="draw-btn" class="btn-free" onclick="drawOmikuji()">無料で引く✨</button>
+  
+  <div id="result-text"></div>
+  <button id="share-btn" class="btn-share" onclick="shareTwitter()">𝕏 で結果をシェアする</button>
+</div>
 
-  <div class="omikuji-paper">
+<script>
+  // おみくじの結果リスト
+  const results =[
+    { rank: "大吉 🚀", text: "To The Moon!! 資産も運気も爆上げの予感⚡️" },
+    { rank: "中吉 🛡️", text: "HODL推奨。焦らず待てば福来たる✨" },
+    { rank: "吉 ⚡️", text: "コツコツSats（徳）を積み上げるのが吉🙏" },
+    { rank: "末吉 📊", text: "レンジ相場。平穏な一日になりそう🍵" }
+  ];
 
-    <!-- ⛩️ ステップ1 & 2: お賽銭エリア -->
-    <div class="paywall-area" id="paywall-area">
-      <div class="paywall-text">おみくじを引くには<br>お賽銭（100 sats）をお願いします⛩️</div>
-      
-      <!-- ステップ1: インボイス生成ボタン -->
-      <button class="btn" id="generate-btn" onclick="generateInvoice()">100satsのインボイスを発行</button>
-      
-      <!-- ステップ2: インボイス表示＆確認ボタン -->
-      <div class="invoice-container" id="invoice-container">
-        <div class="qr-box">
-          <a id="lightning-link" href="#">
-            <img id="qr-code" src="" alt="Lightning Invoice" width="200" height="200">
-          </a>
-        </div>
-        <p style="font-size: 0.9rem; font-weight: bold; margin: 0 0 5px 0;">インボイス文字列 (コピー用)</p>
-        <textarea class="invoice-text" id="invoice-text" readonly onclick="this.select()"></textarea>
-        
-        <div style="margin-top: 15px;">
-          <p style="font-size: 0.9rem; margin-bottom: 10px;">お好きなウォレットで支払い後、<br>下のボタンを押してください。</p>
-          <button class="btn btn-secondary" onclick="verifyPayment()">決済完了しました</button>
-        </div>
-      </div>
-    </div>
+  let isFirstTime = true; // 実際のアプリでは localStorage などを利用します
+  let currentResult = "";
 
-    <!-- 📜 ステップ3: おみくじ結果エリア -->
-    <div class="content-area fade" id="content-area">
-      <div class="top-section"><div class="message-text" id="message"></div></div>
-      <div class="middle-section"><div class="unsei-label">運勢</div><div class="unsei-mark">⛩️</div><div class="unsei-value" id="unsei"></div></div>
-      <div class="bottom-section">
-        <div class="detail-item"><div class="detail-title">願事</div><div class="detail-desc" id="negaigoto"></div></div>
-        <div class="detail-item"><div class="detail-title">恋愛</div><div class="detail-desc" id="renai"></div></div>
-        <div class="detail-item"><div class="detail-title">待人</div><div class="detail-desc" id="machibito"></div></div>
-        <div class="detail-item"><div class="detail-title">商売</div><div class="detail-desc" id="shoubai"></div></div>
-        <div class="detail-item"><div class="detail-title">旅行</div><div class="detail-desc" id="ryokou"></div></div>
-        <div class="detail-item"><div class="detail-title">学問</div><div class="detail-desc" id="gakumon"></div></div>
-        <div class="detail-item"><div class="detail-title">病気</div><div class="detail-desc" id="byouki"></div></div>
-        <div class="detail-item"><div class="detail-title">開運物</div><div class="detail-desc" id="kaiun_mono"></div></div>
-        <div class="detail-item"><div class="detail-title">開運場所</div><div class="detail-desc" id="kaiun_basho"></div></div>
-        <div class="detail-item"><div class="detail-title">開運人物</div><div class="detail-desc" id="kaiun_jinbutsu"></div></div>
-        <div class="detail-item"><div class="detail-title">開運色</div><div class="detail-desc" id="kaiun_iro"></div></div>
-        <div class="detail-item"><div class="detail-title">不運物</div><div class="detail-desc" id="fuun_mono"></div></div>
-        <div class="detail-item"><div class="detail-title">不運場所</div><div class="detail-desc" id="fuun_basho"></div></div>
-        <div class="detail-item"><div class="detail-title">不運人物</div><div class="detail-desc" id="fuun_jinbutsu"></div></div>
-      </div>
-      <div class="btn-container">
-        <button class="btn" onclick="resetApp()">もう一度引く</button>
-      </div>
-    </div>
+  // ページ読み込み時に状態をチェック（今回はモックなので変数管理ですが、実戦用コードを想定）
+  window.onload = () => {
+    if(localStorage.getItem('hasDrawnOmikuji')) {
+      isFirstTime = false;
+      updateToPaidMode();
+    }
+  };
 
-  </div>
+  function updateToPaidMode() {
+    const btn = document.getElementById("draw-btn");
+    const msg = document.getElementById("sats-message");
+    btn.className = "btn-pay";
+    btn.innerHTML = "100satsでお賽銭を入れて引く⚡️";
+    msg.innerHTML = "おみくじを引くために、100sats（お賽銭）をお願いします⛩️";
+  }
 
-  <script>
-    // ⚠️ あなたの売上を受け取るためのLNBits APIキー（Invoice/read key）を設定してください
-    const LNBITS_API_KEY = "67e5b0ad270f44d19e6d768bb3314e49"; 
-    
-    // ★ demoサーバーに向き先を変更しています ★
-    const LNBITS_API_URL = "https://demo.lnbits.com/api/v1/payments"; 
-    
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyI--Lii7gXF0wEPq3mPxAkcH-lSIKysIZNztaysItGbLtafaRkmHqSylETp15Zotns/exec";
+  function drawOmikuji() {
+    const appBox = document.getElementById("app-box");
+    const omikuji = document.getElementById("omikuji");
+    const coin = document.getElementById("coin");
+    const resultText = document.getElementById("result-text");
+    const shareBtn = document.getElementById("share-btn");
 
-    let currentPaymentHash = "";
+    // 初期化
+    resultText.style.display = "none";
+    shareBtn.style.display = "none";
 
-    // リセット処理
-    function resetApp() {
-      document.getElementById('content-area').style.display = 'none';
-      document.getElementById('content-area').classList.add('fade');
-      document.getElementById('paywall-area').style.display = 'flex';
-      document.getElementById('generate-btn').style.display = 'inline-block';
-      document.getElementById('invoice-container').style.display = 'none';
-      currentPaymentHash = "";
-      window.scrollTo(0, 0);
+    // 2回目以降の「お賽銭」支払いプロセス（擬似）
+    if (!isFirstTime) {
+      // ⚡️ここで WebLN（Albyなど）の決済処理を入れる想定⚡️
+      // await window.webln.enable();
+      // await window.webln.sendPayment(invoice);
+      coin.classList.remove("drop-coin");
+      void coin.offsetWidth; // アニメーションリセット
+      coin.classList.add("drop-coin");
     }
 
-    // ① インボイスを生成する
-    function generateInvoice() {
-      if(LNBITS_API_KEY.includes("ここに")) {
-        alert("開発者へ: コード内のLNBITS_API_KEYを設定してください。");
-        return;
+    // カミナリフラッシュ ＆ ガラガラポン アニメーション
+    appBox.classList.add("flash");
+    omikuji.classList.add("shake");
+    
+    setTimeout(() => {
+      appBox.classList.remove("flash");
+      omikuji.classList.remove("shake");
+      
+      // 結果をランダムに選ぶ
+      const randomDraw = results[Math.floor(Math.random() * results.length)];
+      currentResult = `【${randomDraw.rank}】${randomDraw.text}`;
+      
+      // 結果表示
+      omikuji.innerText = "📜"; // 筒から紙に変わる演出
+      resultText.innerHTML = `${randomDraw.rank}<br><span style="font-size:16px">${randomDraw.text}</span>`;
+      resultText.style.display = "block";
+      shareBtn.style.display = "block";
+
+      // 1回引いたら有料モードに切り替え
+      if(isFirstTime) {
+        isFirstTime = false;
+        localStorage.setItem('hasDrawnOmikuji', 'true');
+        setTimeout(updateToPaidMode, 2000); // 2秒後にボタンを有料版に更新
       }
 
-      const btn = document.getElementById('generate-btn');
-      const loader = document.getElementById('loader');
-      btn.style.display = 'none';
-      loader.style.display = 'block';
+      setTimeout(() => { omikuji.innerText = "🪘"; }, 3000); // 筒に戻す
 
-      // 100satsのインボイスをLNBitsに作らせる
-      fetch(LNBITS_API_URL, {
-        method: "POST",
-        headers: { "X-Api-Key": LNBITS_API_KEY, "Content-Type": "application/json" },
-        body: JSON.stringify({ out: false, amount: 100, memo: "おみくじ お賽銭⛩️" })
-      })
-      .then(res => res.json())
-      .then(data => {
-        currentPaymentHash = data.payment_hash;
-        const invoice = data.payment_request;
-        
-        // QRコードと文字列を表示
-        document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=lightning:${invoice}`;
-        document.getElementById('lightning-link').href = `lightning:${invoice}`;
-        document.getElementById('invoice-text').value = invoice;
-        
-        loader.style.display = 'none';
-        document.getElementById('invoice-container').style.display = 'block';
-      })
-      .catch(err => {
-        alert("インボイスの生成に失敗しました。時間をおいて試してください。");
-        loader.style.display = 'none';
-        btn.style.display = 'inline-block';
-      });
-    }
+    }, 1000); // 1秒間揺れる
+  }
 
-    // ② ユーザーが手動で決済完了を確認する
-    function verifyPayment() {
-      if (!currentPaymentHash) return;
+  function shareTwitter() {
+    const text = encodeURIComponent(`電光石火！ビットコイン神社⛩️でおみくじを引いたよ！\n結果は ${currentResult}\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ`);
+    const url = encodeURIComponent("https://your-website-url.com"); // 本番のURLに変更してください
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+  }
+</script>
 
-      const loader = document.getElementById('loader');
-      loader.style.display = 'block';
-
-      // LNBitsに「この決済終わった？」と聞きに行く
-      fetch(`${LNBITS_API_URL}/${currentPaymentHash}`, {
-        method: "GET",
-        headers: { "X-Api-Key": LNBITS_API_KEY }
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.paid) {
-          // 支払い完了！おみくじを起動
-          document.getElementById('paywall-area').style.display = 'none';
-          fetchOmikuji();
-        } else {
-          // まだ支払われていない
-          loader.style.display = 'none';
-          alert("まだ決済が確認できません。支払い完了後に再度ボタンを押してください。");
-        }
-      })
-      .catch(err => {
-        loader.style.display = 'none';
-        alert("確認中にエラーが発生しました。");
-      });
-    }
-
-    // ③ おみくじデータをGASから取得して表示
-    function fetchOmikuji() {
-      const loader = document.getElementById('loader');
-      const contentArea = document.getElementById('content-area');
-
-      contentArea.style.display = 'flex';
-
-      fetch(GAS_URL, { redirect: 'follow' })
-        .then(res => res.json())
-        .then(data => {
-          setTimeout(() => {
-            document.getElementById('unsei').innerText = data.unsei;
-            document.getElementById('message').innerText = data.message;
-            document.getElementById('negaigoto').innerText = data.negaigoto;
-            document.getElementById('renai').innerText = data.renai;
-            document.getElementById('machibito').innerText = data.machibito;
-            document.getElementById('shoubai').innerText = data.shoubai;
-            document.getElementById('ryokou').innerText = data.ryokou;
-            document.getElementById('gakumon').innerText = data.gakumon;
-            document.getElementById('byouki').innerText = data.byouki;
-            document.getElementById('kaiun_mono').innerText = data.kaiun_mono;
-            document.getElementById('kaiun_basho').innerText = data.kaiun_basho;
-            document.getElementById('kaiun_jinbutsu').innerText = data.kaiun_jinbutsu;
-            document.getElementById('kaiun_iro').innerText = data.kaiun_iro;
-            document.getElementById('fuun_mono').innerText = data.fuun_mono;
-            document.getElementById('fuun_basho').innerText = data.fuun_basho;
-            document.getElementById('fuun_jinbutsu').innerText = data.fuun_jinbutsu;
-            
-            contentArea.classList.remove('fade');
-            loader.style.display = 'none';
-            window.scrollTo(0, 0);
-          }, 400);
-        })
-        .catch(err => {
-          document.getElementById('message').innerText = "通信エラーが発生しました。もう一度引き直してください。";
-          contentArea.classList.remove('fade');
-          loader.style.display = 'none';
-        });
-    }
-  </script>
 </body>
 </html>
