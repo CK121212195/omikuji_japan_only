@@ -1,153 +1,388 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ビットコイン神社おみくじ⚡️</title>
-<style>
-  body { font-family: 'Hiragino Kaku Gothic ProN', sans-serif; text-align: center; background-color: #f4f4f4; margin: 0; padding: 50px; }
-  .shrine-container { background: #fff; border-radius: 15px; padding: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; overflow: hidden; position: relative; }
-  h1 { color: #d32f2f; }
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2V0HQQP6WE"></script>
+  <script>
+    window.dataLayer = window.dataLayer ||[];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2V0HQQP6WE');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⛩️LN Omikuji⚡️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
   
-  /* ガラガラ筒のデザイン */
-  .omikuji-box { font-size: 80px; margin: 20px 0; display: inline-block; transition: transform 0.1s; }
-  
-  /* ボタンのデザイン */
-  button { font-size: 18px; padding: 15px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.2s; width: 100%; }
-  .btn-free { background-color: #4CAF50; color: white; }
-  .btn-pay { background-color: #f7931a; color: white; } /* ビットコインオレンジ */
-  .btn-share { background-color: #000000; color: white; display: none; margin-top: 15px; }
+  <style>
+    body {
+      margin: 0; padding: 20px 0; font-family: 'Noto Serif JP', serif;
+      background-color: #2c3e50; display: flex; justify-content: center;
+      align-items: flex-start; min-height: 100vh; box-sizing: border-box;
+      transition: background-color 0.1s;
+    }
+    .omikuji-paper {
+      background-color: #fffdfa; width: 92vw; max-width: 500px; padding: 20px 10px;
+      box-sizing: border-box; position: relative; color: #d34b31;
+      border: 2px solid #d34b31; box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      display: flex; flex-direction: column;
+    }
+    .omikuji-paper::before {
+      content: ""; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px;
+      border: 1px solid #d34b31; pointer-events: none;
+    }
 
-  /* 雷フラッシュアニメーション */
-  .flash { animation: flashAnim 0.3s ease-out; }
-  @keyframes flashAnim {
-    0% { background-color: #fff; }
-    50% { background-color: #ffe600; }
-    100% { background-color: #fff; }
-  }
+    /* --- お賽銭・インボイスエリア --- */
+    .paywall-area {
+      text-align: center; padding: 30px 10px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; min-height: 400px;
+    }
+    .paywall-text { font-size: 1.3rem; font-weight: bold; margin-bottom: 20px; line-height: 1.8; }
+    .invoice-container { display: none; width: 100%; animation: fadeIn 0.5s; }
+    .qr-box {
+      border: 3px solid #d34b31; border-radius: 10px; padding: 10px;
+      background: white; display: inline-block; margin-bottom: 15px;
+    }
+    .invoice-text {
+      width: 90%; height: 60px; font-size: 0.8rem; word-break: break-all;
+      padding: 8px; border: 1px solid #ccc; border-radius: 5px; resize: none;
+      background: #f9f9f9; margin-bottom: 10px; cursor: pointer;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ガラガラ揺れるアニメーション */
-  .shake { animation: shakeAnim 0.5s infinite; }
-  @keyframes shakeAnim {
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    25% { transform: translate(-3px, 0px) rotate(-15deg); }
-    50% { transform: translate(3px, 2px) rotate(15deg); }
-    75% { transform: translate(-1px, -1px) rotate(-5deg); }
-    100% { transform: translate(1px, 1px) rotate(0deg); }
-  }
+    /* --- アニメーション要素 --- */
+    .flash { animation: flashAnim 0.3s ease-out; }
+    @keyframes flashAnim { 0% { background-color: #2c3e50; } 50% { background-color: #ffe600; } 100% { background-color: #2c3e50; } }
+    
+    .shrine-visual { font-size: 80px; position: relative; margin-bottom: 20px; height: 100px; }
+    .coin { position: absolute; font-size: 45px; top: -50px; left: 50%; transform: translateX(-50%); display: none; color: #f7931a; text-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 10; }
+    .drop-coin { display: block; animation: dropAnim 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+    @keyframes dropAnim { 0% { top: -60px; opacity: 1; transform: translateX(-50%) rotate(0deg); } 100% { top: 80px; opacity: 0; transform: translateX(-50%) rotate(180deg); } }
+    
+    .omikuji-box { display: inline-block; transition: transform 0.1s; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); }
+    .shake { animation: shakeAnim 0.4s infinite; }
+    @keyframes shakeAnim { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-4px, 0px) rotate(-15deg); } 50% { transform: translate(4px, 2px) rotate(15deg); } 75% { transform: translate(-2px, -2px) rotate(-5deg); } 100% { transform: translate(1px, 1px) rotate(0deg); } }
 
-  /* コインが落ちるアニメーション */
-  .coin { position: absolute; font-size: 40px; top: -50px; left: 50%; transform: translateX(-50%); display: none; color: #f7931a; }
-  .drop-coin { display: block; animation: dropAnim 0.5s ease-in forwards; }
-  @keyframes dropAnim {
-    0% { top: -50px; opacity: 1; }
-    100% { top: 150px; opacity: 0; }
-  }
+    /* --- ボタン --- */
+    .btn-container { text-align: center; margin-top: 20px; margin-bottom: 10px; z-index: 100; padding: 0 10px; }
+    .btn {
+      color: white; border: none; padding: 14px 25px; border-radius: 25px; cursor: pointer; 
+      font-family: 'Noto Serif JP', serif; font-size: 1.1rem; font-weight: bold;
+      transition: all 0.2s ease; margin: 5px; width: 90%; max-width: 300px; box-sizing: border-box;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn:active { transform: translateY(2px); }
+    .btn-free { background-color: #4CAF50; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); }
+    .btn-pay { background-color: #f7931a; box-shadow: 0 4px 10px rgba(247, 147, 26, 0.3); }
+    .btn-secondary { background: #2c3e50; font-size: 0.9rem; padding: 10px 20px; }
+    .btn-share { background-color: #0f1419; margin-bottom: 10px; }
 
-  #result-text { font-size: 24px; font-weight: bold; margin-top: 20px; color: #333; display: none; }
-  #sats-message { color: #666; font-size: 14px; margin-top: 10px; }
-</style>
+    /* --- ポーリング＆ローダー --- */
+    .polling-area { margin-top: 15px; font-size: 1rem; color: #d34b31; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .spinner { width: 18px; height: 18px; border: 3px solid rgba(211, 75, 49, 0.3); border-top: 3px solid #d34b31; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* --- おみくじ結果エリア --- */
+    .content-area { display: none; flex-direction: column; flex: 1; opacity: 1; transition: opacity 0.8s ease; }
+    .fade { opacity: 0 !important; }
+    .top-section { writing-mode: vertical-rl; width: 100%; min-height: 280px; padding: 30px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
+    .message-text { font-size: 1.6rem; font-weight: 700; line-height: 2; letter-spacing: 0.1em; }
+    .middle-section { margin: 0 15px; padding: 15px 10px; border-top: 1px solid #d34b31; border-bottom: 1px solid #d34b31; display: flex; justify-content: space-between; align-items: center; }
+    .unsei-label { font-size: 1.3rem; letter-spacing: 0.3em; font-weight: 700; }
+    .unsei-mark { width: 36px; height: 36px; border: 2px solid #d34b31; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; }
+    .unsei-value { font-size: 2.2rem; font-weight: 700; letter-spacing: 0.2em; }
+    .bottom-section { display: flex; flex-direction: row-reverse; flex-wrap: wrap; padding: 20px 5px; width: 100%; box-sizing: border-box; }
+    .detail-item { writing-mode: vertical-rl; height: 180px; margin: 0 12px 25px 12px; }
+    .detail-title { font-weight: 700; font-size: 1.2rem; margin-bottom: 8px; }
+    .detail-desc { font-size: 0.95rem; line-height: 1.5; }
+  </style>
 </head>
 <body>
 
-<div class="shrine-container" id="app-box">
-  <h1>ビットコイン神社⛩️</h1>
-  <div class="coin" id="coin">₿</div>
-  <div class="omikuji-box" id="omikuji">🪘</div>
-  
-  <p id="sats-message">初回は無料でおみくじが引けます！</p>
-  
-  <button id="draw-btn" class="btn-free" onclick="drawOmikuji()">無料で引く✨</button>
-  
-  <div id="result-text"></div>
-  <button id="share-btn" class="btn-share" onclick="shareTwitter()">𝕏 で結果をシェアする</button>
-</div>
+  <div class="omikuji-paper">
 
-<script>
-  // おみくじの結果リスト
-  const results =[
-    { rank: "大吉 🚀", text: "To The Moon!! 資産も運気も爆上げの予感⚡️" },
-    { rank: "中吉 🛡️", text: "HODL推奨。焦らず待てば福来たる✨" },
-    { rank: "吉 ⚡️", text: "コツコツSats（徳）を積み上げるのが吉🙏" },
-    { rank: "末吉 📊", text: "レンジ相場。平穏な一日になりそう🍵" }
-  ];
-
-  let isFirstTime = true; // 実際のアプリでは localStorage などを利用します
-  let currentResult = "";
-
-  // ページ読み込み時に状態をチェック（今回はモックなので変数管理ですが、実戦用コードを想定）
-  window.onload = () => {
-    if(localStorage.getItem('hasDrawnOmikuji')) {
-      isFirstTime = false;
-      updateToPaidMode();
-    }
-  };
-
-  function updateToPaidMode() {
-    const btn = document.getElementById("draw-btn");
-    const msg = document.getElementById("sats-message");
-    btn.className = "btn-pay";
-    btn.innerHTML = "100satsでお賽銭を入れて引く⚡️";
-    msg.innerHTML = "おみくじを引くために、100sats（お賽銭）をお願いします⛩️";
-  }
-
-  function drawOmikuji() {
-    const appBox = document.getElementById("app-box");
-    const omikuji = document.getElementById("omikuji");
-    const coin = document.getElementById("coin");
-    const resultText = document.getElementById("result-text");
-    const shareBtn = document.getElementById("share-btn");
-
-    // 初期化
-    resultText.style.display = "none";
-    shareBtn.style.display = "none";
-
-    // 2回目以降の「お賽銭」支払いプロセス（擬似）
-    if (!isFirstTime) {
-      // ⚡️ここで WebLN（Albyなど）の決済処理を入れる想定⚡️
-      // await window.webln.enable();
-      // await window.webln.sendPayment(invoice);
-      coin.classList.remove("drop-coin");
-      void coin.offsetWidth; // アニメーションリセット
-      coin.classList.add("drop-coin");
-    }
-
-    // カミナリフラッシュ ＆ ガラガラポン アニメーション
-    appBox.classList.add("flash");
-    omikuji.classList.add("shake");
-    
-    setTimeout(() => {
-      appBox.classList.remove("flash");
-      omikuji.classList.remove("shake");
+    <!-- ⛩️ ステップ1 & 2: お賽銭エリア -->
+    <div class="paywall-area" id="paywall-area">
       
-      // 結果をランダムに選ぶ
-      const randomDraw = results[Math.floor(Math.random() * results.length)];
-      currentResult = `【${randomDraw.rank}】${randomDraw.text}`;
-      
-      // 結果表示
-      omikuji.innerText = "📜"; // 筒から紙に変わる演出
-      resultText.innerHTML = `${randomDraw.rank}<br><span style="font-size:16px">${randomDraw.text}</span>`;
-      resultText.style.display = "block";
-      shareBtn.style.display = "block";
+      <!-- アニメーション用：筒とコイン -->
+      <div class="shrine-visual">
+        <div class="coin" id="coin">₿</div>
+        <div class="omikuji-box" id="omikuji">🪘</div>
+      </div>
 
-      // 1回引いたら有料モードに切り替え
-      if(isFirstTime) {
-        isFirstTime = false;
-        localStorage.setItem('hasDrawnOmikuji', 'true');
-        setTimeout(updateToPaidMode, 2000); // 2秒後にボタンを有料版に更新
+      <div class="paywall-text" id="paywall-text"></div>
+      
+      <!-- 初回無料ボタン -->
+      <button class="btn btn-free" id="free-btn" onclick="playFree()">無料で引く✨</button>
+      <!-- 2回目以降のお賽銭ボタン -->
+      <button class="btn btn-pay" id="generate-btn" onclick="generateInvoice()" style="display:none;">100satsでお賽銭を入れる⚡️</button>
+      
+      <!-- インボイス表示＆確認エリア -->
+      <div class="invoice-container" id="invoice-container">
+        
+        <!-- ウォレット起動ボタン (スマホ特化) -->
+        <a id="wallet-btn" class="btn btn-pay" href="#" style="text-decoration: none; margin-bottom: 15px;">📲 ウォレットアプリで支払う</a>
+        
+        <div class="qr-box">
+          <a id="lightning-link" href="#">
+            <img id="qr-code" src="" alt="Lightning Invoice" width="200" height="200">
+          </a>
+        </div>
+        <p style="font-size: 0.8rem; font-weight: bold; margin: 0 0 5px 0; color: #666;">インボイス文字列 (タップでコピー)</p>
+        <textarea class="invoice-text" id="invoice-text" readonly onclick="copyInvoice()"></textarea>
+        
+        <!-- 自動ポーリング中表示 -->
+        <div class="polling-area">
+          <div class="spinner"></div>
+          お賽銭の到着を待っています...⛩️
+        </div>
+
+        <!-- フォールバック用手動確認ボタン -->
+        <div style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
+          <p style="font-size: 0.75rem; color: #888; margin-bottom: 5px;">※自動で画面が切り替わらない場合</p>
+          <button class="btn btn-secondary" onclick="verifyPayment()">手動で決済確認する</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 📜 ステップ3: おみくじ結果エリア -->
+    <div class="content-area fade" id="content-area">
+      <div class="top-section"><div class="message-text" id="message"></div></div>
+      <div class="middle-section"><div class="unsei-label">運勢</div><div class="unsei-mark">⛩️</div><div class="unsei-value" id="unsei"></div></div>
+      <div class="bottom-section">
+        <div class="detail-item"><div class="detail-title">願事</div><div class="detail-desc" id="negaigoto"></div></div>
+        <div class="detail-item"><div class="detail-title">恋愛</div><div class="detail-desc" id="renai"></div></div>
+        <div class="detail-item"><div class="detail-title">待人</div><div class="detail-desc" id="machibito"></div></div>
+        <div class="detail-item"><div class="detail-title">商売</div><div class="detail-desc" id="shoubai"></div></div>
+        <div class="detail-item"><div class="detail-title">旅行</div><div class="detail-desc" id="ryokou"></div></div>
+        <div class="detail-item"><div class="detail-title">学問</div><div class="detail-desc" id="gakumon"></div></div>
+        <div class="detail-item"><div class="detail-title">病気</div><div class="detail-desc" id="byouki"></div></div>
+        <div class="detail-item"><div class="detail-title">開運物</div><div class="detail-desc" id="kaiun_mono"></div></div>
+        <div class="detail-item"><div class="detail-title">開運場所</div><div class="detail-desc" id="kaiun_basho"></div></div>
+        <div class="detail-item"><div class="detail-title">開運人物</div><div class="detail-desc" id="kaiun_jinbutsu"></div></div>
+        <div class="detail-item"><div class="detail-title">開運色</div><div class="detail-desc" id="kaiun_iro"></div></div>
+        <div class="detail-item"><div class="detail-title">不運物</div><div class="detail-desc" id="fuun_mono"></div></div>
+        <div class="detail-item"><div class="detail-title">不運場所</div><div class="detail-desc" id="fuun_basho"></div></div>
+        <div class="detail-item"><div class="detail-title">不運人物</div><div class="detail-desc" id="fuun_jinbutsu"></div></div>
+      </div>
+      
+      <!-- シェア＆リセットボタン -->
+      <div class="btn-container">
+        <button class="btn btn-share" onclick="shareTwitter()">
+          <svg viewBox="0 0 24 24" aria-hidden="true" style="width: 18px; height: 18px; fill: white;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+          𝕏 で結果をシェアする
+        </button>
+        <button class="btn" style="background:#d34b31;" onclick="resetApp()">もう一度引く</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ⚠️ あなたのAPIキー・URL設定（元コードのまま維持しています）
+    const LNBITS_API_KEY = "67e5b0ad270f44d19e6d768bb3314e49"; 
+    const LNBITS_API_URL = "https://demo.lnbits.com/api/v1/payments"; 
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyI--Lii7gXF0wEPq3mPxAkcH-lSIKysIZNztaysItGbLtafaRkmHqSylETp15Zotns/exec";
+
+    let currentPaymentHash = "";
+    let checkPaymentInterval = null;
+    let currentOmikujiData = null; // Twitterシェア用データ保持
+
+    // 初回判定
+    window.onload = () => { initApp(); };
+
+    function initApp() {
+      const isFirstTime = !localStorage.getItem('ln_omikuji_played');
+      if (isFirstTime) {
+        document.getElementById('free-btn').style.display = 'inline-flex';
+        document.getElementById('generate-btn').style.display = 'none';
+        document.getElementById('paywall-text').innerHTML = "初回は無料で<br>おみくじが引けます！✨";
+      } else {
+        document.getElementById('free-btn').style.display = 'none';
+        document.getElementById('generate-btn').style.display = 'inline-flex';
+        document.getElementById('paywall-text').innerHTML = "おみくじを引くには<br>お賽銭（100 sats）をお願いします⛩️⚡️";
       }
+    }
 
-      setTimeout(() => { omikuji.innerText = "🪘"; }, 3000); // 筒に戻す
+    // ① 無料で引く
+    function playFree() {
+      localStorage.setItem('ln_omikuji_played', 'true');
+      playAnimationAndFetch();
+    }
 
-    }, 1000); // 1秒間揺れる
-  }
+    // ② インボイスを生成する
+    function generateInvoice() {
+      const btn = document.getElementById('generate-btn');
+      btn.innerText = "インボイス生成中...⚡️";
+      btn.disabled = true;
 
-  function shareTwitter() {
-    const text = encodeURIComponent(`電光石火！ビットコイン神社⛩️でおみくじを引いたよ！\n結果は ${currentResult}\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ`);
-    const url = encodeURIComponent("https://your-website-url.com"); // 本番のURLに変更してください
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-  }
-</script>
+      fetch(LNBITS_API_URL, {
+        method: "POST",
+        headers: { "X-Api-Key": LNBITS_API_KEY, "Content-Type": "application/json" },
+        body: JSON.stringify({ out: false, amount: 100, memo: "おみくじ お賽銭⛩️" })
+      })
+      .then(res => res.json())
+      .then(data => {
+        currentPaymentHash = data.payment_hash;
+        const invoice = data.payment_request;
+        
+        // QRコード、文字列、ウォレット起動リンクをセット
+        document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=lightning:${invoice}`;
+        document.getElementById('lightning-link').href = `lightning:${invoice}`;
+        document.getElementById('wallet-btn').href = `lightning:${invoice}`;
+        document.getElementById('invoice-text').value = invoice;
+        
+        btn.style.display = 'none';
+        btn.disabled = false;
+        btn.innerText = "100satsでお賽銭を入れる⚡️";
+        document.getElementById('invoice-container').style.display = 'block';
+        
+        // 支払い自動検知の開始
+        pollPaymentStatus(currentPaymentHash);
+      })
+      .catch(err => {
+        alert("インボイスの生成に失敗しました。時間をおいて試してください。");
+        btn.disabled = false;
+        btn.innerText = "100satsでお賽銭を入れる⚡️";
+      });
+    }
 
+    function copyInvoice() {
+      const txt = document.getElementById('invoice-text');
+      txt.select();
+      document.execCommand('copy');
+      alert("📋 インボイスをコピーしました！ウォレットに貼り付けてください。");
+    }
+
+    // ③ 支払い自動検知（ポーリング）
+    function pollPaymentStatus(hash) {
+      checkPaymentInterval = setInterval(() => {
+        fetch(`${LNBITS_API_URL}/${hash}`, {
+          method: "GET",
+          headers: { "X-Api-Key": LNBITS_API_KEY }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.paid) {
+            clearInterval(checkPaymentInterval);
+            playAnimationAndFetch(); // 支払い完了！アニメーションへ
+          }
+        }).catch(console.error);
+      }, 3000); // 3秒ごとにチェック
+    }
+
+    // 手動確認用フォールバック
+    function verifyPayment() {
+      if (!currentPaymentHash) return;
+      fetch(`${LNBITS_API_URL}/${currentPaymentHash}`, {
+        method: "GET", headers: { "X-Api-Key": LNBITS_API_KEY }
+      }).then(res => res.json()).then(data => {
+        if (data.paid) {
+          clearInterval(checkPaymentInterval);
+          playAnimationAndFetch();
+        } else {
+          alert("まだお賽銭が確認できません⛩️ アプリで支払い完了後に再度お試しください。");
+        }
+      });
+    }
+
+    // ④ 雷＆ガラガラポン アニメーション ＋ GASフェッチ
+    async function playAnimationAndFetch() {
+      // UIをスッキリさせる
+      document.getElementById('invoice-container').style.display = 'none';
+      document.getElementById('free-btn').style.display = 'none';
+      document.getElementById('generate-btn').style.display = 'none';
+      document.getElementById('paywall-text').innerHTML = "神様にお伺い中...⛩️";
+
+      // アニメーション発火
+      document.body.classList.add('flash'); // カミナリ
+      const coin = document.getElementById('coin');
+      const omikuji = document.getElementById('omikuji');
+      
+      coin.style.display = 'block';
+      coin.classList.add('drop-coin'); // コイン落下
+      omikuji.classList.add('shake'); // 筒揺れる
+
+      // アニメーションを最低1.5秒見せるためのPromise
+      const animPromise = new Promise(resolve => setTimeout(resolve, 1500));
+      // GAS通信
+      const fetchPromise = fetch(GAS_URL, { redirect: 'follow' }).then(res => res.json());
+
+      try {
+        const[_, data] = await Promise.all([animPromise, fetchPromise]);
+        currentOmikujiData = data; // シェア用に保存
+
+        // アニメーション終了処理
+        document.body.classList.remove('flash');
+        coin.classList.remove('drop-coin');
+        coin.style.display = 'none';
+        omikuji.classList.remove('shake');
+        omikuji.innerText = "📜"; // 筒から巻物に変化
+
+        setTimeout(() => { showResult(data); omikuji.innerText = "🪘"; }, 500);
+
+      } catch (err) {
+        alert("神様との通信に失敗しました。もう一度引き直してください。");
+        resetApp();
+      }
+    }
+
+    // ⑤ 結果を画面に表示
+    function showResult(data) {
+      document.getElementById('unsei').innerText = data.unsei;
+      document.getElementById('message').innerText = data.message;
+      document.getElementById('negaigoto').innerText = data.negaigoto;
+      document.getElementById('renai').innerText = data.renai;
+      document.getElementById('machibito').innerText = data.machibito;
+      document.getElementById('shoubai').innerText = data.shoubai;
+      document.getElementById('ryokou').innerText = data.ryokou;
+      document.getElementById('gakumon').innerText = data.gakumon;
+      document.getElementById('byouki').innerText = data.byouki;
+      document.getElementById('kaiun_mono').innerText = data.kaiun_mono;
+      document.getElementById('kaiun_basho').innerText = data.kaiun_basho;
+      document.getElementById('kaiun_jinbutsu').innerText = data.kaiun_jinbutsu;
+      document.getElementById('kaiun_iro').innerText = data.kaiun_iro;
+      document.getElementById('fuun_mono').innerText = data.fuun_mono;
+      document.getElementById('fuun_basho').innerText = data.fuun_basho;
+      document.getElementById('fuun_jinbutsu').innerText = data.fuun_jinbutsu;
+      
+      document.getElementById('paywall-area').style.display = 'none';
+      const contentArea = document.getElementById('content-area');
+      contentArea.style.display = 'flex';
+      
+      setTimeout(() => {
+        contentArea.classList.remove('fade');
+        window.scrollTo(0, 0);
+      }, 100);
+    }
+
+    // ⑥ Twitterシェア機能
+    function shareTwitter() {
+      if(!currentOmikujiData) return;
+      const text = encodeURIComponent(`電光石火！ビットコイン神社⛩️でおみくじを引いたよ！\n\n運勢：【${currentOmikujiData.unsei}】\n神告：${currentOmikujiData.message}\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ`);
+      const url = encodeURIComponent(window.location.href); 
+      window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    }
+
+    // ⑦ リセット処理
+    function resetApp() {
+      document.getElementById('content-area').classList.add('fade');
+      setTimeout(() => {
+        document.getElementById('content-area').style.display = 'none';
+        document.getElementById('paywall-area').style.display = 'flex';
+        document.getElementById('invoice-container').style.display = 'none';
+        
+        // カミナリ・コインのリセット
+        document.body.classList.remove('flash');
+        document.getElementById('coin').style.display = 'none';
+        document.getElementById('omikuji').classList.remove('shake');
+        
+        currentPaymentHash = "";
+        clearInterval(checkPaymentInterval);
+        initApp(); // UI状態を更新
+        window.scrollTo(0, 0);
+      }, 500);
+    }
+  </script>
 </body>
 </html>
