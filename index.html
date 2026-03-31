@@ -53,7 +53,7 @@
     /* --- ボタン --- */
     .btn-container { text-align: center; margin-top: 10px; margin-bottom: 10px; z-index: 100; }
     .btn {
-      background: #d34b31; color: white; border: none; padding: 14px 25px;
+      background: #d34b31; color: white; border: none; padding: 14px 30px;
       border-radius: 25px; cursor: pointer; font-family: 'Noto Serif JP', serif;
       font-size: 1.1rem; box-shadow: 0 4px 10px rgba(211, 75, 49, 0.3);
       transition: all 0.3s ease; margin: 5px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -74,7 +74,7 @@
     .shake { animation: shakeAnim 0.4s infinite; }
     @keyframes shakeAnim { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-4px, 0px) rotate(-15deg); } 50% { transform: translate(4px, 2px) rotate(15deg); } 75% { transform: translate(-2px, -2px) rotate(-5deg); } 100% { transform: translate(1px, 1px) rotate(0deg); } }
     
-    .loading-text { font-size: 1rem; margin-top: 15px; font-weight: bold; letter-spacing: 0.1em; }
+    .loading-text { font-size: 1rem; margin-top: 15px; font-weight: bold; letter-spacing: 0.1em; color: #d34b31; }
     .polling-area { margin-top: 15px; font-size: 1rem; color: #d34b31; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .spinner { width: 18px; height: 18px; border: 3px solid rgba(211, 75, 49, 0.3); border-top: 3px solid #d34b31; border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -112,7 +112,7 @@
       <div class="paywall-text" id="paywall-text"></div>
       
       <!-- 初回無料ボタン -->
-      <button class="btn" id="free-btn" onclick="playFree()" style="display:none;">無料で引く✨</button>
+      <button class="btn" id="free-btn" onclick="playFree()" style="display:none;">無料で引く</button>
       <!-- 2回目以降のお賽銭ボタン -->
       <button class="btn" id="generate-btn" onclick="generateInvoice()" style="display:none;">100satsのインボイスを発行</button>
       
@@ -189,14 +189,21 @@
     window.onload = () => { initApp(); };
 
     function initApp() {
+      // ⚠️テスト等で「初回（無料）」の状態に戻したい場合は、以下の行の「//」を消して一度ブラウザを更新してください。
+      // localStorage.removeItem('ln_omikuji_played'); 
+
       const isFirstTime = !localStorage.getItem('ln_omikuji_played');
       if (isFirstTime) {
         document.getElementById('free-btn').style.display = 'inline-flex';
         document.getElementById('generate-btn').style.display = 'none';
-        document.getElementById('paywall-text').innerHTML = "初回は無料で<br>おみくじが引けます！✨";
+        
+        // ⛩️ キラキラを排除し、右側の画像と同じトーンのテキストにしました
+        document.getElementById('paywall-text').innerHTML = "初回は無料で<br>おみくじが引けます⛩️";
       } else {
         document.getElementById('free-btn').style.display = 'none';
         document.getElementById('generate-btn').style.display = 'inline-flex';
+        
+        // ⛩️ 2回目以降
         document.getElementById('paywall-text').innerHTML = "おみくじを引くには<br>お賽銭（100 sats）をお願いします⛩️";
       }
     }
@@ -278,13 +285,11 @@
 
     // ⚡️ ここから神殿の扉が開くアニメーション ⚡️
     async function playAnimationAndFetch() {
-      // 初期画面の静的なUIを消す
       document.getElementById('invoice-container').style.display = 'none';
       document.getElementById('free-btn').style.display = 'none';
       document.getElementById('generate-btn').style.display = 'none';
       document.getElementById('paywall-text').style.display = 'none';
 
-      // 隠していたアニメーション要素（筒とコイン）を出現させる
       const shrineVisual = document.getElementById('shrine-visual');
       const coin = document.getElementById('coin');
       const omikuji = document.getElementById('omikuji');
@@ -296,7 +301,6 @@
       coin.classList.add('drop-coin'); 
       omikuji.classList.add('shake');
 
-      // 最低1.5秒はアニメーションを見せる
       const animPromise = new Promise(resolve => setTimeout(resolve, 1500));
       const fetchPromise = fetch(GAS_URL, { redirect: 'follow' }).then(res => res.json());
 
@@ -358,7 +362,6 @@
       setTimeout(() => {
         document.getElementById('content-area').style.display = 'none';
         
-        // 画面を初期状態に戻す
         document.getElementById('paywall-area').style.display = 'flex';
         document.getElementById('paywall-text').style.display = 'block';
         document.getElementById('shrine-visual').style.display = 'none';
