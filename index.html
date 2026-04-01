@@ -77,7 +77,7 @@
     .btn-share { background: #0f1419; color: white; font-size: 1rem; }
     .btn:disabled { background: #e0e0e0; color: #999; box-shadow: none; cursor: not-allowed; }
 
-    /* --- アニメーション要素 (通常時は非表示) --- */
+    /* --- アニメーション要素 --- */
     .shrine-visual { display: none; position: relative; margin-bottom: 20px; height: 160px; }
     .omikuji-box { font-size: 80px; display: inline-block; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); margin-top: 40px;}
     .coin { position: absolute; font-size: 45px; top: -10px; left: 50%; transform: translateX(-50%); display: none; color: #f7931a; text-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 10; }
@@ -111,8 +111,6 @@
 <body>
 
   <div class="omikuji-paper">
-
-    <!-- ⛩️ ステップ1 & 2: お賽銭エリア -->
     <div class="paywall-area" id="paywall-area">
 
       <!-- タイトル -->
@@ -121,25 +119,18 @@
         <div class="main-title">ビットコイナー御神籤</div>
       </div>
       
-      <!-- アニメーション発火時のみ表示される要素 -->
       <div class="shrine-visual" id="shrine-visual">
         <div class="coin" id="coin">₿</div>
         <div class="omikuji-box" id="omikuji">🪘</div>
         <div class="loading-text">神様にお伺い中...⛩️</div>
       </div>
 
-      <!-- 初期画面のテキスト -->
       <div class="paywall-text" id="paywall-text"></div>
       
-      <!-- 初回無料ボタン -->
       <button class="btn" id="free-btn" onclick="playFree()" style="display:none;">無料で引く</button>
-      <!-- 2回目以降のお賽銭ボタン -->
       <button class="btn" id="generate-btn" onclick="generateInvoice()" style="display:none;">100satsのインボイスを発行</button>
       
-      <!-- インボイス表示＆確認エリア -->
       <div class="invoice-container" id="invoice-container">
-        
-        <!-- ウォレット起動ボタン (スマホ特化) -->
         <a id="wallet-btn" class="btn" href="#" style="text-decoration: none; margin-bottom: 15px; display: inline-block;">📲 ウォレットアプリで支払う</a>
         
         <div class="qr-box">
@@ -150,13 +141,11 @@
         <p style="font-size: 0.8rem; font-weight: bold; margin: 0 0 5px 0; color: #666;">インボイス文字列 (タップでコピー)</p>
         <textarea class="invoice-text" id="invoice-text" readonly onclick="copyInvoice()"></textarea>
         
-        <!-- 自動ポーリング中表示 -->
         <div class="polling-area">
           <div class="spinner"></div>
           お賽銭の到着を待っています...⛩️
         </div>
 
-        <!-- フォールバック用手動確認ボタン -->
         <div style="margin-top: 20px; border-top: 1px dashed #e0e0e0; padding-top: 15px;">
           <p style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">自動で画面が切り替わらない場合</p>
           <button class="btn btn-secondary" onclick="verifyPayment()">手動で決済確認する</button>
@@ -164,7 +153,6 @@
       </div>
     </div>
 
-    <!-- 📜 ステップ3: おみくじ結果エリア -->
     <div class="content-area fade" id="content-area">
       <div class="top-section"><div class="message-text" id="message"></div></div>
       <div class="middle-section"><div class="unsei-label">運勢</div><div class="unsei-mark">⛩️</div><div class="unsei-value" id="unsei"></div></div>
@@ -185,7 +173,6 @@
         <div class="detail-item"><div class="detail-title">不運人物</div><div class="detail-desc" id="fuun_jinbutsu"></div></div>
       </div>
       
-      <!-- シェア＆リセットボタン -->
       <div class="btn-container">
         <button class="btn btn-share" onclick="shareTwitter()">
           <svg viewBox="0 0 24 24" aria-hidden="true" style="width: 18px; height: 18px; fill: white;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
@@ -205,34 +192,36 @@
     let currentPaymentHash = "";
     let checkPaymentInterval = null;
     let currentOmikujiData = null;
+    let isFetchingOmikuji = false; // 🚧 連続発火を防ぐための最強のロックフラグ
 
     window.onload = () => { initApp(); };
 
     function initApp() {
-      // ⚠️テスト等で「初回（無料）」の状態に戻したい場合は、以下の行の「//」を消して一度ブラウザを更新してください。
+      // ⚠️初回テスト時は以下の行のコメントアウトを外してリロードしてください。
       // localStorage.removeItem('ln_omikuji_played'); 
 
       const isFirstTime = !localStorage.getItem('ln_omikuji_played');
       if (isFirstTime) {
         document.getElementById('free-btn').style.display = 'inline-flex';
         document.getElementById('generate-btn').style.display = 'none';
-        
         document.getElementById('paywall-text').innerHTML = "初回は無料で<br>おみくじが引けます⛩️";
       } else {
         document.getElementById('free-btn').style.display = 'none';
         document.getElementById('generate-btn').style.display = 'inline-flex';
-        
         document.getElementById('paywall-text').innerHTML = "おみくじを引くには<br>お賽銭（100 sats）をお願いします⛩️";
       }
     }
 
     function playFree() {
+      if(isFetchingOmikuji) return; // 二重実行防止
+      isFetchingOmikuji = true;
       localStorage.setItem('ln_omikuji_played', 'true');
       playAnimationAndFetch();
     }
 
     function generateInvoice() {
       const btn = document.getElementById('generate-btn');
+      if(btn.disabled) return; // 二重実行防止
       btn.innerText = "インボイス生成中...⚡️";
       btn.disabled = true;
 
@@ -273,13 +262,17 @@
     }
 
     function pollPaymentStatus(hash) {
+      if (checkPaymentInterval) clearInterval(checkPaymentInterval); // 古いタイマーを確実に消す
+
       checkPaymentInterval = setInterval(() => {
         fetch(`${LNBITS_API_URL}/${hash}`, {
           method: "GET", headers: { "X-Api-Key": LNBITS_API_KEY }
         })
         .then(res => res.json())
         .then(data => {
-          if (data.paid) {
+          // 🚧 isFetchingOmikuji が false の時のみ発火させる（連続発火防止！）
+          if (data.paid && !isFetchingOmikuji) {
+            isFetchingOmikuji = true; 
             clearInterval(checkPaymentInterval);
             playAnimationAndFetch();
           }
@@ -288,11 +281,12 @@
     }
 
     function verifyPayment() {
-      if (!currentPaymentHash) return;
+      if (!currentPaymentHash || isFetchingOmikuji) return; // 連続発火防止
       fetch(`${LNBITS_API_URL}/${currentPaymentHash}`, {
         method: "GET", headers: { "X-Api-Key": LNBITS_API_KEY }
       }).then(res => res.json()).then(data => {
-        if (data.paid) {
+        if (data.paid && !isFetchingOmikuji) {
+          isFetchingOmikuji = true;
           clearInterval(checkPaymentInterval);
           playAnimationAndFetch();
         } else {
@@ -303,7 +297,6 @@
 
     // ⚡️ ここから神殿の扉が開くアニメーション ⚡️
     async function playAnimationAndFetch() {
-      // 画面整理（タイトルは残す）
       document.getElementById('invoice-container').style.display = 'none';
       document.getElementById('free-btn').style.display = 'none';
       document.getElementById('generate-btn').style.display = 'none';
@@ -390,8 +383,11 @@
         document.getElementById('coin').style.display = 'none';
         document.getElementById('omikuji').classList.remove('shake');
         
+        // 🚧 全ての状態をリセットしてロックを解除
         currentPaymentHash = "";
-        clearInterval(checkPaymentInterval);
+        if (checkPaymentInterval) clearInterval(checkPaymentInterval);
+        isFetchingOmikuji = false; // ロック解除！
+
         initApp(); 
         window.scrollTo(0, 0);
       }, 500);
