@@ -11,7 +11,7 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>⛩️LN Omikuji⚡️</title>
+  <title>⛩️ビットコイナー御神籤⚡️</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
   
   <style>
@@ -35,9 +35,23 @@
     /* --- お賽銭・インボイスエリア --- */
     .paywall-area {
       text-align: center; padding: 30px 10px; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; min-height: 400px;
+      align-items: center; justify-content: center; min-height: 420px;
     }
-    .paywall-text { font-size: 1.3rem; font-weight: bold; margin-bottom: 20px; line-height: 1.8; color: #d34b31; }
+    
+    /* --- タイトルエリア --- */
+    .title-area {
+      margin-bottom: 40px; text-align: center;
+    }
+    .sub-title {
+      font-size: 0.85rem; color: #d34b31; letter-spacing: 0.15em;
+      margin-bottom: 8px; font-weight: bold; opacity: 0.9;
+    }
+    .main-title {
+      font-size: 2.1rem; font-weight: 700; color: #d34b31;
+      letter-spacing: 0.05em; margin: 0; line-height: 1.2;
+    }
+
+    .paywall-text { font-size: 1.3rem; font-weight: bold; margin-bottom: 25px; line-height: 1.8; color: #d34b31; }
     .invoice-container { display: none; width: 100%; animation: fadeIn 0.5s; }
     .qr-box {
       border: 3px solid #d34b31; border-radius: 10px; padding: 10px;
@@ -100,6 +114,12 @@
 
     <!-- ⛩️ ステップ1 & 2: お賽銭エリア -->
     <div class="paywall-area" id="paywall-area">
+
+      <!-- タイトル -->
+      <div class="title-area" id="title-area">
+        <div class="sub-title">Lightning Network</div>
+        <div class="main-title">ビットコイナー御神籤</div>
+      </div>
       
       <!-- アニメーション発火時のみ表示される要素 -->
       <div class="shrine-visual" id="shrine-visual">
@@ -197,13 +217,11 @@
         document.getElementById('free-btn').style.display = 'inline-flex';
         document.getElementById('generate-btn').style.display = 'none';
         
-        // ⛩️ キラキラを排除し、右側の画像と同じトーンのテキストにしました
         document.getElementById('paywall-text').innerHTML = "初回は無料で<br>おみくじが引けます⛩️";
       } else {
         document.getElementById('free-btn').style.display = 'none';
         document.getElementById('generate-btn').style.display = 'inline-flex';
         
-        // ⛩️ 2回目以降
         document.getElementById('paywall-text').innerHTML = "おみくじを引くには<br>お賽銭（100 sats）をお願いします⛩️";
       }
     }
@@ -221,7 +239,7 @@
       fetch(LNBITS_API_URL, {
         method: "POST",
         headers: { "X-Api-Key": LNBITS_API_KEY, "Content-Type": "application/json" },
-        body: JSON.stringify({ out: false, amount: 100, memo: "おみくじ お賽銭⛩️" })
+        body: JSON.stringify({ out: false, amount: 100, memo: "ビットコイナー御神籤 お賽銭⛩️" })
       })
       .then(res => res.json())
       .then(data => {
@@ -285,6 +303,7 @@
 
     // ⚡️ ここから神殿の扉が開くアニメーション ⚡️
     async function playAnimationAndFetch() {
+      // 画面整理（タイトルは残す）
       document.getElementById('invoice-container').style.display = 'none';
       document.getElementById('free-btn').style.display = 'none';
       document.getElementById('generate-btn').style.display = 'none';
@@ -352,7 +371,7 @@
 
     function shareTwitter() {
       if(!currentOmikujiData) return;
-      const text = encodeURIComponent(`電光石火！ビットコイン神社⛩️でおみくじを引いたよ！\n\n運勢：【${currentOmikujiData.unsei}】\n神告：${currentOmikujiData.message}\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ`);
+      const text = encodeURIComponent(`電光石火！ビットコイナー御神籤⛩️を引いたよ！\n\n運勢：【${currentOmikujiData.unsei}】\n神告：${currentOmikujiData.message}\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ`);
       const url = encodeURIComponent(window.location.href); 
       window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
     }
