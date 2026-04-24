@@ -13,8 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>⛩️ビットコイナー御神籤⚡️</title>
     
-  <!-- 🟢 ここから下を追加！ 🟢 -->
-  <!-- Open Graph (LINE, Discordなどで綺麗に表示させるため) -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ck121212195.github.io/omikuji_japan_only/">
   <meta property="og:site_name" content="⛩️ビットコイナー御神籤⚡️">
@@ -22,14 +21,12 @@
   <meta property="og:description" content="Lightning Networkで少額支払いして、日本のおみくじを楽しもう！運勢・ラッキーアイテムなどが当たるよ⚡️">
   <meta property="og:image" content="https://ck121212195.github.io/omikuji_japan_only/og-image.png">
 
-  <!-- Twitter Card (Xで大きな画像を表示させるため) -->
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ビットコイナー御神籤 - Lightningでおみくじを引こう">
   <meta name="twitter:description" content="Lightning Networkで少額支払いして、日本のおみくじを楽しもう！運勢・ラッキーアイテムなどが当たるよ⚡️">
   <meta name="twitter:image" content="https://ck121212195.github.io/omikuji_japan_only/og-image.png">
-  <!-- 🟢 追加するのはここまで！ 🟢 -->
 
- 
   <!-- ⛩️ おみくじ用ファビコン -->
   <link rel="icon" type="image/png" href="omikuji-favicon.png?v=1" sizes="32x32">
   <link rel="icon" type="image/png" href="omikuji-favicon.png?v=1" sizes="192x192">
@@ -54,16 +51,24 @@
       border: 1px solid #d34b31; pointer-events: none;
     }
 
+    /* --- 言語セレクタ --- */
+    .lang-selector {
+      position: absolute; top: 15px; right: 15px; z-index: 100;
+    }
+    select.lang-select {
+      background: #fffdfa; color: #d34b31; border: 1px solid #d34b31;
+      padding: 4px 8px; border-radius: 4px; font-family: 'Noto Serif JP', serif;
+      font-size: 0.8rem; font-weight: bold; cursor: pointer; outline: none;
+    }
+
     /* --- お賽銭・インボイスエリア --- */
     .paywall-area {
       text-align: center; padding: 30px 10px; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; min-height: 420px;
+      align-items: center; justify-content: center; min-height: 420px; position: relative;
     }
     
     /* --- タイトルエリア --- */
-    .title-area {
-      margin-bottom: 40px; text-align: center;
-    }
+    .title-area { margin-bottom: 40px; text-align: center; }
     .sub-title {
       font-size: 0.85rem; color: #d34b31; letter-spacing: 0.15em;
       margin-bottom: 8px; font-weight: bold; opacity: 0.9;
@@ -73,7 +78,7 @@
       letter-spacing: 0.05em; margin: 0; line-height: 1.2;
     }
 
-    .paywall-text { font-size: 1.3rem; font-weight: bold; margin-bottom: 25px; line-height: 1.8; color: #d34b31; }
+    .paywall-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 25px; line-height: 1.8; color: #d34b31; }
     .invoice-container { display: none; width: 100%; animation: fadeIn 0.5s; }
     .qr-box {
       border: 3px solid #d34b31; border-radius: 10px; padding: 10px;
@@ -89,14 +94,14 @@
     /* --- ボタン --- */
     .btn-container { text-align: center; margin-top: 10px; margin-bottom: 10px; z-index: 100; }
     .btn {
-      background: #d34b31; color: white; border: none; padding: 14px 30px;
+      background: #d34b31; color: white; border: none; padding: 14px 24px;
       border-radius: 25px; cursor: pointer; font-family: 'Noto Serif JP', serif;
-      font-size: 1.1rem; box-shadow: 0 4px 10px rgba(211, 75, 49, 0.3);
+      font-size: 1rem; box-shadow: 0 4px 10px rgba(211, 75, 49, 0.3);
       transition: all 0.3s ease; margin: 5px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     }
     .btn:active { transform: translateY(2px); }
-    .btn-secondary { background: #2c3e50; font-size: 0.95rem; }
-    .btn-share { background: #0f1419; color: white; font-size: 1rem; }
+    .btn-secondary { background: #2c3e50; font-size: 0.85rem; padding: 10px 20px;}
+    .btn-share { background: #0f1419; color: white; font-size: 0.95rem; }
     .btn:disabled { background: #e0e0e0; color: #999; box-shadow: none; cursor: not-allowed; }
 
     /* --- アニメーション要素 --- */
@@ -111,7 +116,7 @@
     @keyframes shakeAnim { 0% { transform: translate(1px, 1px) rotate(0deg); } 25% { transform: translate(-4px, 0px) rotate(-15deg); } 50% { transform: translate(4px, 2px) rotate(15deg); } 75% { transform: translate(-2px, -2px) rotate(-5deg); } 100% { transform: translate(1px, 1px) rotate(0deg); } }
     
     .loading-text { font-size: 1rem; margin-top: 15px; font-weight: bold; letter-spacing: 0.1em; color: #d34b31; }
-    .polling-area { margin-top: 15px; font-size: 1rem; color: #d34b31; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .polling-area { margin-top: 15px; font-size: 0.9rem; color: #d34b31; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .spinner { width: 18px; height: 18px; border: 3px solid rgba(211, 75, 49, 0.3); border-top: 3px solid #d34b31; border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -119,88 +124,100 @@
     .content-area { display: none; flex-direction: column; flex: 1; opacity: 1; transition: opacity 0.8s ease; }
     .fade { opacity: 0 !important; }
     .top-section { writing-mode: vertical-rl; width: 100%; min-height: 280px; padding: 30px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
-    .message-text { font-size: 1.6rem; font-weight: 700; line-height: 2; letter-spacing: 0.1em; }
+    .message-text { font-size: 1.4rem; font-weight: 700; line-height: 2; letter-spacing: 0.1em; }
     .middle-section { margin: 0 15px; padding: 15px 10px; border-top: 1px solid #d34b31; border-bottom: 1px solid #d34b31; display: flex; justify-content: space-between; align-items: center; }
-    .unsei-label { font-size: 1.3rem; letter-spacing: 0.3em; font-weight: 700; }
+    .unsei-label { font-size: 1.3rem; letter-spacing: 0.2em; font-weight: 700; }
     .unsei-mark { width: 36px; height: 36px; border: 2px solid #d34b31; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; }
-    .unsei-value { font-size: 2.2rem; font-weight: 700; letter-spacing: 0.2em; }
+    .unsei-value { font-size: 2.2rem; font-weight: 700; letter-spacing: 0.1em; }
     .bottom-section { display: flex; flex-direction: row-reverse; flex-wrap: wrap; padding: 20px 5px; width: 100%; box-sizing: border-box; }
     .detail-item { writing-mode: vertical-rl; height: 180px; margin: 0 12px 25px 12px; }
-    .detail-title { font-weight: 700; font-size: 1.2rem; margin-bottom: 8px; }
+    .detail-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
     .detail-desc { font-size: 0.95rem; line-height: 1.5; }
   </style>
 </head>
 <body>
 
   <div class="omikuji-paper">
+    
+    <!-- 言語切り替え -->
+    <div class="lang-selector">
+      <select class="lang-select" onchange="changeLanguage(this.value)">
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="en">🇺🇸 English</option>
+        <option value="ko">🇰🇷 한국어</option>
+      </select>
+    </div>
+
     <div class="paywall-area" id="paywall-area">
 
       <!-- タイトル -->
       <div class="title-area" id="title-area">
         <div class="sub-title">Lightning Network</div>
-        <div class="main-title">ビットコイナー御神籤</div>
+        <div class="main-title" data-i18n="main-title">ビットコイナー御神籤</div>
       </div>
       
       <div class="shrine-visual" id="shrine-visual">
         <div class="coin" id="coin">₿</div>
         <div class="omikuji-box" id="omikuji">🪘</div>
-        <div class="loading-text">神様にお伺い中...⛩️</div>
+        <div class="loading-text" data-i18n="loading-text">神様にお伺い中...⛩️</div>
       </div>
 
       <div class="paywall-text" id="paywall-text"></div>
       
-      <button class="btn" id="free-btn" onclick="playFree()" style="display:none;">無料で引く</button>
-      <button class="btn" id="generate-btn" onclick="generateInvoice()" style="display:none;">100satsのインボイスを発行</button>
+      <button class="btn" id="free-btn" onclick="playFree()" style="display:none;" data-i18n="free-btn">無料で引く</button>
+      <button class="btn" id="generate-btn" onclick="generateInvoice()" style="display:none;" data-i18n="generate-btn">100satsのインボイスを発行</button>
       
       <div class="invoice-container" id="invoice-container">
-        <a id="wallet-btn" class="btn" href="#" style="text-decoration: none; margin-bottom: 15px; display: inline-block;">📲 ウォレットアプリで支払う</a>
+        <a id="wallet-btn" class="btn" href="#" style="text-decoration: none; margin-bottom: 15px; display: inline-block;">
+          📲 <span data-i18n="wallet-btn">ウォレットアプリで支払う</span>
+        </a>
         
         <div class="qr-box">
           <a id="lightning-link" href="#">
             <img id="qr-code" src="" alt="Lightning Invoice" width="200" height="200">
           </a>
         </div>
-        <p style="font-size: 0.8rem; font-weight: bold; margin: 0 0 5px 0; color: #666;">インボイス文字列 (タップでコピー)</p>
+        <p style="font-size: 0.8rem; font-weight: bold; margin: 0 0 5px 0; color: #666;" data-i18n="invoice-text-label">インボイス文字列 (タップでコピー)</p>
         <textarea class="invoice-text" id="invoice-text" readonly onclick="copyInvoice()"></textarea>
         
         <div class="polling-area">
           <div class="spinner"></div>
-          お賽銭の到着を待っています...⛩️
+          <span data-i18n="polling-text">お賽銭の到着を待っています...⛩️</span>
         </div>
 
         <div style="margin-top: 20px; border-top: 1px dashed #e0e0e0; padding-top: 15px;">
-          <p style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">自動で画面が切り替わらない場合</p>
-          <button class="btn btn-secondary" onclick="verifyPayment()">手動で決済確認する</button>
+          <p style="font-size: 0.8rem; color: #888; margin-bottom: 10px;" data-i18n="manual-verify-msg">自動で画面が切り替わらない場合</p>
+          <button class="btn btn-secondary" onclick="verifyPayment()" data-i18n="manual-verify-btn">手動で決済確認する</button>
         </div>
       </div>
     </div>
 
     <div class="content-area fade" id="content-area">
       <div class="top-section"><div class="message-text" id="message"></div></div>
-      <div class="middle-section"><div class="unsei-label">運勢</div><div class="unsei-mark">⛩️</div><div class="unsei-value" id="unsei"></div></div>
+      <div class="middle-section"><div class="unsei-label" data-i18n="unsei-label">運勢</div><div class="unsei-mark">⛩️</div><div class="unsei-value" id="unsei"></div></div>
       <div class="bottom-section">
-        <div class="detail-item"><div class="detail-title">願事</div><div class="detail-desc" id="negaigoto"></div></div>
-        <div class="detail-item"><div class="detail-title">恋愛</div><div class="detail-desc" id="renai"></div></div>
-        <div class="detail-item"><div class="detail-title">待人</div><div class="detail-desc" id="machibito"></div></div>
-        <div class="detail-item"><div class="detail-title">商売</div><div class="detail-desc" id="shoubai"></div></div>
-        <div class="detail-item"><div class="detail-title">旅行</div><div class="detail-desc" id="ryokou"></div></div>
-        <div class="detail-item"><div class="detail-title">学問</div><div class="detail-desc" id="gakumon"></div></div>
-        <div class="detail-item"><div class="detail-title">病気</div><div class="detail-desc" id="byouki"></div></div>
-        <div class="detail-item"><div class="detail-title">開運物</div><div class="detail-desc" id="kaiun_mono"></div></div>
-        <div class="detail-item"><div class="detail-title">開運場所</div><div class="detail-desc" id="kaiun_basho"></div></div>
-        <div class="detail-item"><div class="detail-title">開運人物</div><div class="detail-desc" id="kaiun_jinbutsu"></div></div>
-        <div class="detail-item"><div class="detail-title">開運色</div><div class="detail-desc" id="kaiun_iro"></div></div>
-        <div class="detail-item"><div class="detail-title">不運物</div><div class="detail-desc" id="fuun_mono"></div></div>
-        <div class="detail-item"><div class="detail-title">不運場所</div><div class="detail-desc" id="fuun_basho"></div></div>
-        <div class="detail-item"><div class="detail-title">不運人物</div><div class="detail-desc" id="fuun_jinbutsu"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-negaigoto">願事</div><div class="detail-desc" id="negaigoto"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-renai">恋愛</div><div class="detail-desc" id="renai"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-machibito">待人</div><div class="detail-desc" id="machibito"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-shoubai">商売</div><div class="detail-desc" id="shoubai"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-ryokou">旅行</div><div class="detail-desc" id="ryokou"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-gakumon">学問</div><div class="detail-desc" id="gakumon"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-byouki">病気</div><div class="detail-desc" id="byouki"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-kaiun_mono">開運物</div><div class="detail-desc" id="kaiun_mono"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-kaiun_basho">開運場所</div><div class="detail-desc" id="kaiun_basho"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-kaiun_jinbutsu">開運人物</div><div class="detail-desc" id="kaiun_jinbutsu"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-kaiun_iro">開運色</div><div class="detail-desc" id="kaiun_iro"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-fuun_mono">不運物</div><div class="detail-desc" id="fuun_mono"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-fuun_basho">不運場所</div><div class="detail-desc" id="fuun_basho"></div></div>
+        <div class="detail-item"><div class="detail-title" data-i18n="detail-fuun_jinbutsu">不運人物</div><div class="detail-desc" id="fuun_jinbutsu"></div></div>
       </div>
       
       <div class="btn-container">
         <button class="btn btn-share" onclick="shareTwitter()">
           <svg viewBox="0 0 24 24" aria-hidden="true" style="width: 18px; height: 18px; fill: white;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
-          𝕏 で結果をシェアする
+          <span data-i18n="share-btn">𝕏 で結果をシェアする</span>
         </button>
-        <button class="btn" onclick="resetApp()">もう一度引く</button>
+        <button class="btn" onclick="resetApp()" data-i18n="retry-btn">もう一度引く</button>
       </div>
     </div>
 
@@ -214,28 +231,96 @@
     let currentPaymentHash = "";
     let checkPaymentInterval = null;
     let currentOmikujiData = null;
-    let isFetchingOmikuji = false; // 🚧 連続発火を防ぐための最強のロックフラグ
+    let isFetchingOmikuji = false;
+    let currentLang = "ja"; // デフォルト言語
+
+    // 多言語辞書
+    const i18n = {
+      ja: {
+        "main-title": "ビットコイナー御神籤", "free-btn": "無料で引く", "generate-btn": "100satsのインボイスを発行",
+        "wallet-btn": "ウォレットアプリで支払う", "invoice-text-label": "インボイス文字列 (タップでコピー)",
+        "loading-text": "神様にお伺い中...⛩️", "polling-text": "お賽銭の到着を待っています...⛩️",
+        "manual-verify-msg": "自動で画面が切り替わらない場合", "manual-verify-btn": "手動で決済確認する",
+        "unsei-label": "運勢", "detail-negaigoto": "願事", "detail-renai": "恋愛", "detail-machibito": "待人",
+        "detail-shoubai": "商売", "detail-ryokou": "旅行", "detail-gakumon": "学問", "detail-byouki": "病気",
+        "detail-kaiun_mono": "開運物", "detail-kaiun_basho": "開運場所", "detail-kaiun_jinbutsu": "開運人物", "detail-kaiun_iro": "開運色",
+        "detail-fuun_mono": "不運物", "detail-fuun_basho": "不運場所", "detail-fuun_jinbutsu": "不運人物",
+        "share-btn": "𝕏 で結果をシェアする", "retry-btn": "もう一度引く",
+        "paywall_free": "初回は無料で<br>おみくじが引けます⛩️", "paywall_paid": "おみくじを引くには<br>お賽銭（100 sats）をお願いします⛩️",
+        "alert_invoice_fail": "インボイスの生成に失敗しました。時間をおいて試してください。", "alert_copy": "📋 インボイスをコピーしました！ウォレットに貼り付けてください。",
+        "alert_unpaid": "まだお賽銭が確認できません⛩️ アプリで支払い完了後に再度お試しください。", "alert_fetch_fail": "神様との通信に失敗しました。もう一度引き直してください。",
+        "btn_generating": "インボイス生成中...⚡️", "btn_generate": "100satsのインボイスを発行",
+        "share_text_1": "電光石火！ビットコイナー御神籤⛩️を引いたよ！\n\n運勢：【", "share_text_2": "】\n神告：", "share_text_3": "\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ"
+      },
+      en: {
+        "main-title": "Bitcoiner Omikuji", "free-btn": "Draw for Free", "generate-btn": "Generate 100 Sats Invoice",
+        "wallet-btn": "Pay with Wallet App", "invoice-text-label": "Invoice String (Tap to Copy)",
+        "loading-text": "Consulting the Gods...⛩️", "polling-text": "Waiting for your Sats...⛩️",
+        "manual-verify-msg": "If the screen doesn't change automatically", "manual-verify-btn": "Verify Payment Manually",
+        "unsei-label": "Fortune", "detail-negaigoto": "Wish", "detail-renai": "Romance", "detail-machibito": "Visitor",
+        "detail-shoubai": "Business", "detail-ryokou": "Travel", "detail-gakumon": "Study", "detail-byouki": "Health",
+        "detail-kaiun_mono": "Lucky Item", "detail-kaiun_basho": "Lucky Place", "detail-kaiun_jinbutsu": "Lucky Person", "detail-kaiun_iro": "Lucky Color",
+        "detail-fuun_mono": "Unlucky Item", "detail-fuun_basho": "Unlucky Place", "detail-fuun_jinbutsu": "Unlucky Person",
+        "share-btn": "Share on 𝕏", "retry-btn": "Draw Again",
+        "paywall_free": "Draw your first<br>Omikuji for free! ⛩️", "paywall_paid": "Please offer 100 Sats<br>to draw an Omikuji! ⛩️",
+        "alert_invoice_fail": "Failed to generate invoice. Please try again later.", "alert_copy": "📋 Invoice copied! Paste it in your wallet.",
+        "alert_unpaid": "Payment not confirmed yet⛩️ Try again after paying in your app.", "alert_fetch_fail": "Failed to communicate with the Gods. Please try again.",
+        "btn_generating": "Generating Invoice...⚡️", "btn_generate": "Generate 100 Sats Invoice",
+        "share_text_1": "I drew the Bitcoiner Omikuji⛩️!\n\nFortune:[", "share_text_2": "]\nMessage: ", "share_text_3": "\n\n⚡️Offer Sats and try your luck!\n#BitcoinShrine #LightningNetwork #Omikuji"
+      },
+      ko: {
+        "main-title": "비트코이너 오미쿠지", "free-btn": "무료로 뽑기", "generate-btn": "100 Sats 인보이스 생성",
+        "wallet-btn": "지갑 앱으로 결제하기", "invoice-text-label": "인보이스 문자열 (탭하여 복사)",
+        "loading-text": "신에게 묻는 중...⛩️", "polling-text": "결제를 기다리는 중...⛩️",
+        "manual-verify-msg": "화면이 자동으로 넘어가지 않는 경우", "manual-verify-btn": "수동으로 결제 확인하기",
+        "unsei-label": "운세", "detail-negaigoto": "소원", "detail-renai": "연애", "detail-machibito": "귀인",
+        "detail-shoubai": "사업", "detail-ryokou": "여행", "detail-gakumon": "학업", "detail-byouki": "건강",
+        "detail-kaiun_mono": "행운의 물건", "detail-kaiun_basho": "행운의 장소", "detail-kaiun_jinbutsu": "행운의 인물", "detail-kaiun_iro": "행운의 색상",
+        "detail-fuun_mono": "불운의 물건", "detail-fuun_basho": "불운의 장소", "detail-fuun_jinbutsu": "불운의 인물",
+        "share-btn": "𝕏에 결과 공유하기", "retry-btn": "다시 뽑기",
+        "paywall_free": "첫 오미쿠지는<br>무료로 뽑을 수 있습니다! ⛩️", "paywall_paid": "오미쿠지를 뽑으려면<br>100 Sats를 헌납해 주세요! ⛩️",
+        "alert_invoice_fail": "인보이스 생성에 실패했습니다. 나중에 다시 시도해 주세요.", "alert_copy": "📋 인보이스가 복사되었습니다! 지갑에 붙여넣어 주세요.",
+        "alert_unpaid": "아직 결제가 확인되지 않았습니다⛩️ 앱에서 결제 후 다시 시도해 주세요.", "alert_fetch_fail": "신과의 통신에 실패했습니다. 다시 뽑아주세요.",
+        "btn_generating": "인보이스 생성 중...⚡️", "btn_generate": "100 Sats 인보이스 생성",
+        "share_text_1": "비트코이너 오미쿠지⛩️를 뽑았어요!\n\n운세:[", "share_text_2": "]\n메시지: ", "share_text_3": "\n\n⚡️당신도 Sats를 헌납하고 운세를 확인해 보세요!\n#BitcoinShrine #LightningNetwork #Omikuji"
+      }
+    };
+
+    function changeLanguage(lang) {
+      currentLang = lang;
+      
+      // テキストの一括置換
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+      });
+
+      // ボタンの状態等に応じた動的テキストの更新
+      const genBtn = document.getElementById('generate-btn');
+      if (genBtn.disabled) genBtn.innerText = i18n[lang]['btn_generating'];
+
+      // ペイウォール（無料/有料）のテキスト更新
+      const isFirstTime = !localStorage.getItem('ln_omikuji_played');
+      document.getElementById('paywall-text').innerHTML = isFirstTime ? i18n[lang]['paywall_free'] : i18n[lang]['paywall_paid'];
+    }
 
     window.onload = () => { initApp(); };
 
     function initApp() {
-      // ⚠️初回テスト時は以下の行のコメントアウトを外してリロードしてください。
-      // localStorage.removeItem('ln_omikuji_played'); 
-
       const isFirstTime = !localStorage.getItem('ln_omikuji_played');
       if (isFirstTime) {
         document.getElementById('free-btn').style.display = 'inline-flex';
         document.getElementById('generate-btn').style.display = 'none';
-        document.getElementById('paywall-text').innerHTML = "初回は無料で<br>おみくじが引けます⛩️";
+        document.getElementById('paywall-text').innerHTML = i18n[currentLang]['paywall_free'];
       } else {
         document.getElementById('free-btn').style.display = 'none';
         document.getElementById('generate-btn').style.display = 'inline-flex';
-        document.getElementById('paywall-text').innerHTML = "おみくじを引くには<br>お賽銭（100 sats）をお願いします⛩️";
+        document.getElementById('paywall-text').innerHTML = i18n[currentLang]['paywall_paid'];
       }
     }
 
     function playFree() {
-      if(isFetchingOmikuji) return; // 二重実行防止
+      if(isFetchingOmikuji) return;
       isFetchingOmikuji = true;
       localStorage.setItem('ln_omikuji_played', 'true');
       playAnimationAndFetch();
@@ -243,14 +328,14 @@
 
     function generateInvoice() {
       const btn = document.getElementById('generate-btn');
-      if(btn.disabled) return; // 二重実行防止
-      btn.innerText = "インボイス生成中...⚡️";
+      if(btn.disabled) return; 
+      btn.innerText = i18n[currentLang]['btn_generating'];
       btn.disabled = true;
 
       fetch(LNBITS_API_URL, {
         method: "POST",
         headers: { "X-Api-Key": LNBITS_API_KEY, "Content-Type": "application/json" },
-        body: JSON.stringify({ out: false, amount: 100, memo: "ビットコイナー御神籤 お賽銭⛩️" })
+        body: JSON.stringify({ out: false, amount: 100, memo: "Bitcoiner Omikuji ⛩️" })
       })
       .then(res => res.json())
       .then(data => {
@@ -264,15 +349,15 @@
         
         btn.style.display = 'none';
         btn.disabled = false;
-        btn.innerText = "100satsのインボイスを発行";
+        btn.innerText = i18n[currentLang]['btn_generate'];
         document.getElementById('invoice-container').style.display = 'block';
         
         pollPaymentStatus(currentPaymentHash);
       })
       .catch(err => {
-        alert("インボイスの生成に失敗しました。時間をおいて試してください。");
+        alert(i18n[currentLang]['alert_invoice_fail']);
         btn.disabled = false;
-        btn.innerText = "100satsのインボイスを発行";
+        btn.innerText = i18n[currentLang]['btn_generate'];
       });
     }
 
@@ -280,11 +365,11 @@
       const txt = document.getElementById('invoice-text');
       txt.select();
       document.execCommand('copy');
-      alert("📋 インボイスをコピーしました！ウォレットに貼り付けてください。");
+      alert(i18n[currentLang]['alert_copy']);
     }
 
     function pollPaymentStatus(hash) {
-      if (checkPaymentInterval) clearInterval(checkPaymentInterval); // 古いタイマーを確実に消す
+      if (checkPaymentInterval) clearInterval(checkPaymentInterval); 
 
       checkPaymentInterval = setInterval(() => {
         fetch(`${LNBITS_API_URL}/${hash}`, {
@@ -292,7 +377,6 @@
         })
         .then(res => res.json())
         .then(data => {
-          // 🚧 isFetchingOmikuji が false の時のみ発火させる（連続発火防止！）
           if (data.paid && !isFetchingOmikuji) {
             isFetchingOmikuji = true; 
             clearInterval(checkPaymentInterval);
@@ -303,7 +387,7 @@
     }
 
     function verifyPayment() {
-      if (!currentPaymentHash || isFetchingOmikuji) return; // 連続発火防止
+      if (!currentPaymentHash || isFetchingOmikuji) return; 
       fetch(`${LNBITS_API_URL}/${currentPaymentHash}`, {
         method: "GET", headers: { "X-Api-Key": LNBITS_API_KEY }
       }).then(res => res.json()).then(data => {
@@ -312,12 +396,11 @@
           clearInterval(checkPaymentInterval);
           playAnimationAndFetch();
         } else {
-          alert("まだお賽銭が確認できません⛩️ アプリで支払い完了後に再度お試しください。");
+          alert(i18n[currentLang]['alert_unpaid']);
         }
       });
     }
 
-    // ⚡️ ここから神殿の扉が開くアニメーション ⚡️
     async function playAnimationAndFetch() {
       document.getElementById('invoice-container').style.display = 'none';
       document.getElementById('free-btn').style.display = 'none';
@@ -336,7 +419,8 @@
       omikuji.classList.add('shake');
 
       const animPromise = new Promise(resolve => setTimeout(resolve, 1500));
-      const fetchPromise = fetch(GAS_URL, { redirect: 'follow' }).then(res => res.json());
+      // GAS側で将来的に多言語対応できるように lang= を付与してリクエストを送ります
+      const fetchPromise = fetch(`${GAS_URL}?lang=${currentLang}`, { redirect: 'follow' }).then(res => res.json());
 
       try {
         const[_, data] = await Promise.all([animPromise, fetchPromise]);
@@ -351,7 +435,7 @@
         setTimeout(() => { showResult(data); omikuji.innerText = "🪘"; }, 500);
 
       } catch (err) {
-        alert("神様との通信に失敗しました。もう一度引き直してください。");
+        alert(i18n[currentLang]['alert_fetch_fail']);
         resetApp();
       }
     }
@@ -386,7 +470,12 @@
 
     function shareTwitter() {
       if(!currentOmikujiData) return;
-      const text = encodeURIComponent(`電光石火！ビットコイナー御神籤⛩️を引いたよ！\n\n運勢：【${currentOmikujiData.unsei}】\n神告：${currentOmikujiData.message}\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ`);
+      const t = i18n[currentLang];
+      const text = encodeURIComponent(
+        t['share_text_1'] + currentOmikujiData.unsei + 
+        t['share_text_2'] + currentOmikujiData.message + 
+        t['share_text_3']
+      );
       const url = encodeURIComponent(window.location.href); 
       window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
     }
@@ -405,10 +494,9 @@
         document.getElementById('coin').style.display = 'none';
         document.getElementById('omikuji').classList.remove('shake');
         
-        // 🚧 全ての状態をリセットしてロックを解除
         currentPaymentHash = "";
         if (checkPaymentInterval) clearInterval(checkPaymentInterval);
-        isFetchingOmikuji = false; // ロック解除！
+        isFetchingOmikuji = false;
 
         initApp(); 
         window.scrollTo(0, 0);
