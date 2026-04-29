@@ -17,14 +17,14 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ck121212195.github.io/omikuji_japan_only/">
   <meta property="og:site_name" content="⛩️ビットコイナー御神籤⚡️">
-  <meta property="og:title" content="ビットコイナー御神籤 - Lightningでおみくじをお楽しみください">
-  <meta property="og:description" content="Lightning Networkで少額決済をして、日本のおみくじをお楽しみください。運勢やラッキーアイテムなどが占えます⚡️">
+  <meta property="og:title" content="ビットコイナー御神籤 - Lightningでおみくじを引こう">
+  <meta property="og:description" content="Lightning Networkで少額支払いして、日本のおみくじを楽しもう！運勢・ラッキーアイテムなどが当たるよ⚡️">
   <meta property="og:image" content="https://ck121212195.github.io/omikuji_japan_only/og-image.png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ビットコイナー御神籤 - Lightningでおみくじをお楽しみください">
-  <meta name="twitter:description" content="Lightning Networkで少額決済をして、日本のおみくじをお楽しみください。運勢やラッキーアイテムなどが占えます⚡️">
+  <meta name="twitter:title" content="ビットコイナー御神籤 - Lightningでおみくじを引こう">
+  <meta name="twitter:description" content="Lightning Networkで少額支払いして、日本のおみくじを楽しもう！運勢・ラッキーアイテムなどが当たるよ⚡️">
   <meta name="twitter:image" content="https://ck121212195.github.io/omikuji_japan_only/og-image.png">
 
   <!-- ⛩️ おみくじ用ファビコン -->
@@ -168,17 +168,17 @@
       <div class="shrine-visual" id="shrine-visual">
         <div class="coin" id="coin">₿</div>
         <div class="omikuji-box" id="omikuji">🪘</div>
-        <div class="loading-text" data-i18n="loading-text">神様にお伺いしております...⛩️</div>
+        <div class="loading-text" data-i18n="loading-text">神様にお伺い中...⛩️</div>
       </div>
 
       <div class="paywall-text" id="paywall-text"></div>
       
       <button class="btn" id="free-btn" onclick="playFree()" style="display:none;" data-i18n="free-btn">無料で引く</button>
-      <button class="btn" id="generate-btn" onclick="generateInvoice()" style="display:none;" data-i18n="generate-btn">100satsのインボイスを発行する</button>
+      <button class="btn" id="generate-btn" onclick="generateInvoice()" style="display:none;" data-i18n="generate-btn">100satsのインボイスを発行</button>
       
       <div class="invoice-container" id="invoice-container">
         <a id="wallet-btn" class="btn" href="#" style="text-decoration: none; margin-bottom: 15px; display: inline-block;">
-          📲 <span data-i18n="wallet-btn">ウォレットアプリでお支払いいただく</span>
+          📲 <span data-i18n="wallet-btn">ウォレットアプリで支払う</span>
         </a>
         
         <div class="qr-box">
@@ -191,12 +191,12 @@
         
         <div class="polling-area">
           <div class="spinner"></div>
-          <span data-i18n="polling-text">お賽銭の到着をお待ちしております...⛩️</span>
+          <span data-i18n="polling-text">お賽銭の到着を待っています...⛩️</span>
         </div>
 
         <div style="margin-top: 20px; border-top: 1px dashed #e0e0e0; padding-top: 15px;">
           <p style="font-size: 0.8rem; color: #888; margin-bottom: 10px;" data-i18n="manual-verify-msg">自動で画面が切り替わらない場合</p>
-          <button class="btn btn-secondary" onclick="verifyPayment()" data-i18n="manual-verify-btn">手動で決済を確認する</button>
+          <button class="btn btn-secondary" onclick="verifyPayment()" data-i18n="manual-verify-btn">手動で決済確認する</button>
         </div>
       </div>
     </div>
@@ -224,7 +224,7 @@
       <div class="btn-container">
         <button class="btn btn-share" onclick="shareTwitter()">
           <svg viewBox="0 0 24 24" aria-hidden="true" style="width: 18px; height: 18px; fill: white;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
-          <span data-i18n="share-btn">𝕏 で結果をシェアする (+1回無料)</span>
+          <span data-i18n="share-btn">𝕏 で結果をシェアする</span>
         </button>
         <button class="btn" onclick="resetApp()" data-i18n="retry-btn">もう一度引く</button>
       </div>
@@ -262,29 +262,24 @@
     let isFetchingOmikuji = false;
     let currentLang = "ja"; // デフォルト言語
 
-    // 誠実で丁寧な言葉遣いの多言語辞書
+    // 多言語辞書
     const i18n = {
       ja: {
-        "main-title": "ビットコイナー御神籤", "free-btn": "無料で引く", "generate-btn": "100satsのインボイスを発行する",
-        "wallet-btn": "ウォレットアプリでお支払いいただく", "invoice-text-label": "インボイス文字列 (タップでコピー)",
-        "loading-text": "神様にお伺いしております...⛩️", "polling-text": "お賽銭の到着をお待ちしております...⛩️",
-        "manual-verify-msg": "自動で画面が切り替わらない場合", "manual-verify-btn": "手動で決済を確認する",
+        "main-title": "ビットコイナー御神籤", "free-btn": "無料で引く", "generate-btn": "100satsのインボイスを発行",
+        "wallet-btn": "ウォレットアプリで支払う", "invoice-text-label": "インボイス文字列 (タップでコピー)",
+        "loading-text": "神様にお伺い中...⛩️", "polling-text": "お賽銭の到着を待っています...⛩️",
+        "manual-verify-msg": "自動で画面が切り替わらない場合", "manual-verify-btn": "手動で決済確認する",
         "unsei-label": "運勢", "detail-negaigoto": "願事", "detail-renai": "恋愛", "detail-machibito": "待人",
         "detail-shoubai": "商売", "detail-ryokou": "旅行", "detail-gakumon": "学問", "detail-byouki": "病気",
         "detail-kaiun_mono": "開運物", "detail-kaiun_basho": "開運場所", "detail-kaiun_jinbutsu": "開運人物", "detail-kaiun_iro": "開運色",
         "detail-fuun_mono": "不運物", "detail-fuun_basho": "不運場所", "detail-fuun_jinbutsu": "不運人物",
-        "share-btn": "𝕏 で結果をシェアする (+1回無料)", "retry-btn": "もう一度引く",
-        "paywall_free": "初回は無料で<br>おみくじをお引きいただけます⛩️",
-        "paywall_share_free": "シェア特典により、<br>あと {n} 回無料でお引きいただけます⛩️",
-        "paywall_paid": "おみくじを引くには<br>お賽銭（100 sats）をお願いいたします⛩️",
-        "alert_invoice_fail": "インボイスの生成に失敗いたしました。恐れ入りますが、時間をおいて再度お試しください。", 
-        "alert_copy": "📋 インボイスをコピーいたしました。ウォレットに貼り付けてお支払いください。",
-        "alert_unpaid": "まだお賽銭が確認できておりません⛩️ アプリでの支払いが完了した後に、再度お試しください。", 
-        "alert_fetch_fail": "神様との通信に失敗いたしました。誠に恐れ入りますが、もう一度お引き直しください。",
-        "btn_generating": "インボイスを発行しております...⚡️", "btn_generate": "100satsのインボイスを発行する",
-        "share_text_1": "ビットコイナー御神籤⛩️を引かせていただきました。\n\n運勢：【", "share_text_2": "】\n神告：", "share_text_3": "\n\n⚡️皆様もSatsをお賽銭して、ぜひ運勢を占ってみてください。\n#ビットコイン神社 #LightningNetwork #おみくじ",
-        "other_games": "他のゲーム",
-        "alert_share_thanks": "シェアしていただき、誠にありがとうございます。1回分の無料プレイ権を付与いたしました。"
+        "share-btn": "𝕏 で結果をシェアする", "retry-btn": "もう一度引く",
+        "paywall_free": "初回は無料で<br>おみくじが引けます⛩️", "paywall_paid": "おみくじを引くには<br>お賽銭（100 sats）をお願いします⛩️",
+        "alert_invoice_fail": "インボイスの生成に失敗しました。時間をおいて試してください。", "alert_copy": "📋 インボイスをコピーしました！ウォレットに貼り付けてください。",
+        "alert_unpaid": "まだお賽銭が確認できません⛩️ アプリで支払い完了後に再度お試しください。", "alert_fetch_fail": "神様との通信に失敗しました。もう一度引き直してください。",
+        "btn_generating": "インボイス生成中...⚡️", "btn_generate": "100satsのインボイスを発行",
+        "share_text_1": "電光石火！ビットコイナー御神籤⛩️を引いたよ！\n\n運勢：【", "share_text_2": "】\n神告：", "share_text_3": "\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ",
+        "other_games": "他のゲーム"
       },
       en: {
         "main-title": "Bitcoiner Omikuji", "free-btn": "Draw for Free", "generate-btn": "Generate 100 Sats Invoice",
@@ -295,18 +290,13 @@
         "detail-shoubai": "Business", "detail-ryokou": "Travel", "detail-gakumon": "Study", "detail-byouki": "Health",
         "detail-kaiun_mono": "Lucky Item", "detail-kaiun_basho": "Lucky Place", "detail-kaiun_jinbutsu": "Lucky Person", "detail-kaiun_iro": "Lucky Color",
         "detail-fuun_mono": "Unlucky Item", "detail-fuun_basho": "Unlucky Place", "detail-fuun_jinbutsu": "Unlucky Person",
-        "share-btn": "Share on 𝕏 (+1 Free Draw)", "retry-btn": "Draw Again",
-        "paywall_free": "You may draw your first<br>Omikuji free of charge. ⛩️",
-        "paywall_share_free": "Thanks to your share, you have <br>{n} free draw(s) remaining. ⛩️",
-        "paywall_paid": "Please offer 100 Sats<br>to draw an Omikuji. ⛩️",
-        "alert_invoice_fail": "Failed to generate invoice. Please try again later.", 
-        "alert_copy": "📋 Invoice copied! Please paste it into your wallet.",
-        "alert_unpaid": "Payment not confirmed yet⛩️ Try again after paying in your app.", 
-        "alert_fetch_fail": "Failed to communicate with the Gods. Please try again.",
+        "share-btn": "Share on 𝕏", "retry-btn": "Draw Again",
+        "paywall_free": "Draw your first<br>Omikuji for free! ⛩️", "paywall_paid": "Please offer 100 Sats<br>to draw an Omikuji! ⛩️",
+        "alert_invoice_fail": "Failed to generate invoice. Please try again later.", "alert_copy": "📋 Invoice copied! Paste it in your wallet.",
+        "alert_unpaid": "Payment not confirmed yet⛩️ Try again after paying in your app.", "alert_fetch_fail": "Failed to communicate with the Gods. Please try again.",
         "btn_generating": "Generating Invoice...⚡️", "btn_generate": "Generate 100 Sats Invoice",
-        "share_text_1": "I have drawn the Bitcoiner Omikuji⛩️.\n\nFortune:[", "share_text_2": "]\nMessage: ", "share_text_3": "\n\n⚡️Please offer Sats and try your luck as well.\n#BitcoinShrine #LightningNetwork #Omikuji",
-        "other_games": "OTHER GAMES",
-        "alert_share_thanks": "Thank you very much for sharing. We have granted you 1 free draw."
+        "share_text_1": "I drew the Bitcoiner Omikuji⛩️!\n\nFortune:[", "share_text_2": "]\nMessage: ", "share_text_3": "\n\n⚡️Offer Sats and try your luck!\n#BitcoinShrine #LightningNetwork #Omikuji",
+        "other_games": "OTHER GAMES"
       },
       ko: {
         "main-title": "비트코이너 오미쿠지", "free-btn": "무료로 뽑기", "generate-btn": "100 Sats 인보이스 생성",
@@ -317,18 +307,13 @@
         "detail-shoubai": "사업", "detail-ryokou": "여행", "detail-gakumon": "학업", "detail-byouki": "건강",
         "detail-kaiun_mono": "행운의 물건", "detail-kaiun_basho": "행운의 장소", "detail-kaiun_jinbutsu": "행운의 인물", "detail-kaiun_iro": "행운의 색상",
         "detail-fuun_mono": "불운의 물건", "detail-fuun_basho": "불운의 장소", "detail-fuun_jinbutsu": "불운의 인물",
-        "share-btn": "𝕏에 결과 공유하기 (+1회 무료)", "retry-btn": "다시 뽑기",
-        "paywall_free": "첫 오미쿠지는<br>무료로 뽑아보실 수 있습니다. ⛩️",
-        "paywall_share_free": "공유 혜택으로 <br>앞으로 {n}회 무료로 뽑으실 수 있습니다⛩️",
-        "paywall_paid": "오미쿠지를 뽑으시려면<br>100 Sats를 헌납해 주시길 바랍니다. ⛩️",
-        "alert_invoice_fail": "인보이스 생성에 실패했습니다. 나중에 다시 시도해 주세요.", 
-        "alert_copy": "📋 인보이스가 복사되었습니다! 지갑에 붙여넣어 결제해 주세요.",
-        "alert_unpaid": "아직 결제가 확인되지 않았습니다⛩️ 앱에서 결제 후 다시 시도해 주세요.", 
-        "alert_fetch_fail": "신과의 통신에 실패했습니다. 죄송하지만 다시 시도해 주세요.",
+        "share-btn": "𝕏에 결과 공유하기", "retry-btn": "다시 뽑기",
+        "paywall_free": "첫 오미쿠지는<br>무료로 뽑을 수 있습니다! ⛩️", "paywall_paid": "오미쿠지를 뽑으려면<br>100 Sats를 헌납해 주세요! ⛩️",
+        "alert_invoice_fail": "인보이스 생성에 실패했습니다. 나중에 다시 시도해 주세요.", "alert_copy": "📋 인보이스가 복사되었습니다! 지갑에 붙여넣어 주세요.",
+        "alert_unpaid": "아직 결제가 확인되지 않았습니다⛩️ 앱에서 결제 후 다시 시도해 주세요.", "alert_fetch_fail": "신과의 통신에 실패했습니다. 다시 뽑아주세요.",
         "btn_generating": "인보이스 생성 중...⚡️", "btn_generate": "100 Sats 인보이스 생성",
-        "share_text_1": "비트코이너 오미쿠지⛩️를 뽑았습니다.\n\n운세:[", "share_text_2": "]\n메시지: ", "share_text_3": "\n\n⚡️여러분도 Sats를 헌납하고 운세를 확인해 보시길 바랍니다.\n#BitcoinShrine #LightningNetwork #Omikuji",
-        "other_games": "다른 게임",
-        "alert_share_thanks": "공유해 주셔서 대단히 감사합니다. 1회 무료 플레이 권한이 부여되었습니다."
+        "share_text_1": "비트코이너 오미쿠지⛩️를 뽑았어요!\n\n운세:[", "share_text_2": "]\n메시지: ", "share_text_3": "\n\n⚡️당신도 Sats를 헌납하고 운세를 확인해 보세요!\n#BitcoinShrine #LightningNetwork #Omikuji",
+        "other_games": "다른 게임"
       }
     };
 
@@ -345,24 +330,19 @@
       const genBtn = document.getElementById('generate-btn');
       if (genBtn.disabled) genBtn.innerText = i18n[lang]['btn_generating'];
 
-      initApp();
+      // ペイウォール（無料/有料）のテキスト更新
+      const isFirstTime = !localStorage.getItem('ln_omikuji_played');
+      document.getElementById('paywall-text').innerHTML = isFirstTime ? i18n[lang]['paywall_free'] : i18n[lang]['paywall_paid'];
     }
 
     window.onload = () => { initApp(); };
 
     function initApp() {
       const isFirstTime = !localStorage.getItem('ln_omikuji_played');
-      let freeSpins = parseInt(localStorage.getItem('ln_omikuji_free_spins') || '0', 10);
-
-      if (isFirstTime || freeSpins > 0) {
+      if (isFirstTime) {
         document.getElementById('free-btn').style.display = 'inline-flex';
         document.getElementById('generate-btn').style.display = 'none';
-        
-        if (freeSpins > 0 && !isFirstTime) {
-          document.getElementById('paywall-text').innerHTML = i18n[currentLang]['paywall_share_free'].replace('{n}', freeSpins);
-        } else {
-          document.getElementById('paywall-text').innerHTML = i18n[currentLang]['paywall_free'];
-        }
+        document.getElementById('paywall-text').innerHTML = i18n[currentLang]['paywall_free'];
       } else {
         document.getElementById('free-btn').style.display = 'none';
         document.getElementById('generate-btn').style.display = 'inline-flex';
@@ -373,16 +353,7 @@
     function playFree() {
       if(isFetchingOmikuji) return;
       isFetchingOmikuji = true;
-
-      const isFirstTime = !localStorage.getItem('ln_omikuji_played');
-      let freeSpins = parseInt(localStorage.getItem('ln_omikuji_free_spins') || '0', 10);
-
-      if (isFirstTime) {
-        localStorage.setItem('ln_omikuji_played', 'true');
-      } else if (freeSpins > 0) {
-        localStorage.setItem('ln_omikuji_free_spins', (freeSpins - 1).toString());
-      }
-      
+      localStorage.setItem('ln_omikuji_played', 'true');
       playAnimationAndFetch();
     }
 
@@ -479,6 +450,7 @@
       omikuji.classList.add('shake');
 
       const animPromise = new Promise(resolve => setTimeout(resolve, 1500));
+      // GAS側で将来的に多言語対応できるように lang= を付与してリクエストを送ります
       const fetchPromise = fetch(`${GAS_URL}?lang=${currentLang}`, { redirect: 'follow' }).then(res => res.json());
 
       try {
@@ -537,14 +509,6 @@
       );
       const url = encodeURIComponent(window.location.href); 
       window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-
-      // Xでのシェア完了後に無料プレイ権を付与
-      let currentFreeSpins = parseInt(localStorage.getItem('ln_omikuji_free_spins') || '0', 10);
-      localStorage.setItem('ln_omikuji_free_spins', (currentFreeSpins + 1).toString());
-
-      setTimeout(() => {
-        alert(t['alert_share_thanks']);
-      }, 500);
     }
 
     function resetApp() {
