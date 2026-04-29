@@ -133,6 +133,15 @@
     .detail-item { writing-mode: vertical-rl; height: 180px; margin: 0 12px 25px 12px; }
     .detail-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
     .detail-desc { font-size: 0.95rem; line-height: 1.5; }
+
+    /* --- OTHER GAMES (他ゲームへのリンク) --- */
+    .more-games { width: 100%; padding: 20px 10px; box-sizing: border-box; border-top: 1px dashed rgba(211, 75, 49, 0.4); margin-top: auto; z-index: 2; position: relative; }
+    .mg-title { font-size: 0.85rem; font-weight: 700; color: #d34b31; text-transform: uppercase; margin-bottom: 15px; text-align: center; letter-spacing: 0.1em; }
+    .mg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .mg-card { background: #fffdfa; border: 1px solid rgba(211, 75, 49, 0.4); border-radius: 8px; padding: 12px 4px; text-align: center; text-decoration: none; transition: all 0.2s; display: block; }
+    .mg-card:hover { border-color: #d34b31; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(211, 75, 49, 0.15); background: #fdf5e6; }
+    .mg-icon { font-size: 24px; margin-bottom: 8px; }
+    .mg-name { font-size: 0.7rem; font-weight: 700; color: #d34b31; font-family: sans-serif; white-space: nowrap; }
   </style>
 </head>
 <body>
@@ -221,6 +230,25 @@
       </div>
     </div>
 
+    <!-- OTHER GAMES セクション -->
+    <div class="more-games">
+      <div class="mg-title" data-i18n="other_games">他のゲーム</div>
+      <div class="mg-grid">
+        <a href="https://ck121212195.github.io/LNbits_slot2/" target="_blank" class="mg-card">
+          <div class="mg-icon">🎰</div>
+          <div class="mg-name">Lightning Slot</div>
+        </a>
+        <a href="https://ck121212195.github.io/Bitcoin-Run/" target="_blank" class="mg-card">
+          <div class="mg-icon">🏃‍♂️</div>
+          <div class="mg-name">Bitcoin Run</div>
+        </a>
+        <a href="https://ck121212195.github.io/Plinko-Bitcoin/" target="_blank" class="mg-card">
+          <div class="mg-icon">⚡</div>
+          <div class="mg-name">Plinko</div>
+        </a>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -250,7 +278,8 @@
         "alert_invoice_fail": "インボイスの生成に失敗しました。時間をおいて試してください。", "alert_copy": "📋 インボイスをコピーしました！ウォレットに貼り付けてください。",
         "alert_unpaid": "まだお賽銭が確認できません⛩️ アプリで支払い完了後に再度お試しください。", "alert_fetch_fail": "神様との通信に失敗しました。もう一度引き直してください。",
         "btn_generating": "インボイス生成中...⚡️", "btn_generate": "100satsのインボイスを発行",
-        "share_text_1": "電光石火！ビットコイナー御神籤⛩️を引いたよ！\n\n運勢：【", "share_text_2": "】\n神告：", "share_text_3": "\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ"
+        "share_text_1": "電光石火！ビットコイナー御神籤⛩️を引いたよ！\n\n運勢：【", "share_text_2": "】\n神告：", "share_text_3": "\n\n⚡️あなたもSatsをお賽銭して運勢を占おう！\n#ビットコイン神社 #LightningNetwork #おみくじ",
+        "other_games": "他のゲーム"
       },
       en: {
         "main-title": "Bitcoiner Omikuji", "free-btn": "Draw for Free", "generate-btn": "Generate 100 Sats Invoice",
@@ -266,7 +295,8 @@
         "alert_invoice_fail": "Failed to generate invoice. Please try again later.", "alert_copy": "📋 Invoice copied! Paste it in your wallet.",
         "alert_unpaid": "Payment not confirmed yet⛩️ Try again after paying in your app.", "alert_fetch_fail": "Failed to communicate with the Gods. Please try again.",
         "btn_generating": "Generating Invoice...⚡️", "btn_generate": "Generate 100 Sats Invoice",
-        "share_text_1": "I drew the Bitcoiner Omikuji⛩️!\n\nFortune:[", "share_text_2": "]\nMessage: ", "share_text_3": "\n\n⚡️Offer Sats and try your luck!\n#BitcoinShrine #LightningNetwork #Omikuji"
+        "share_text_1": "I drew the Bitcoiner Omikuji⛩️!\n\nFortune:[", "share_text_2": "]\nMessage: ", "share_text_3": "\n\n⚡️Offer Sats and try your luck!\n#BitcoinShrine #LightningNetwork #Omikuji",
+        "other_games": "OTHER GAMES"
       },
       ko: {
         "main-title": "비트코이너 오미쿠지", "free-btn": "무료로 뽑기", "generate-btn": "100 Sats 인보이스 생성",
@@ -282,7 +312,8 @@
         "alert_invoice_fail": "인보이스 생성에 실패했습니다. 나중에 다시 시도해 주세요.", "alert_copy": "📋 인보이스가 복사되었습니다! 지갑에 붙여넣어 주세요.",
         "alert_unpaid": "아직 결제가 확인되지 않았습니다⛩️ 앱에서 결제 후 다시 시도해 주세요.", "alert_fetch_fail": "신과의 통신에 실패했습니다. 다시 뽑아주세요.",
         "btn_generating": "인보이스 생성 중...⚡️", "btn_generate": "100 Sats 인보이스 생성",
-        "share_text_1": "비트코이너 오미쿠지⛩️를 뽑았어요!\n\n운세:[", "share_text_2": "]\n메시지: ", "share_text_3": "\n\n⚡️당신도 Sats를 헌납하고 운세를 확인해 보세요!\n#BitcoinShrine #LightningNetwork #Omikuji"
+        "share_text_1": "비트코이너 오미쿠지⛩️를 뽑았어요!\n\n운세:[", "share_text_2": "]\n메시지: ", "share_text_3": "\n\n⚡️당신도 Sats를 헌납하고 운세를 확인해 보세요!\n#BitcoinShrine #LightningNetwork #Omikuji",
+        "other_games": "다른 게임"
       }
     };
 
